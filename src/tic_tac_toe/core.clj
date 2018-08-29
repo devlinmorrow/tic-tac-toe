@@ -1,9 +1,6 @@
 (ns tic-tac-toe.core)
 
-(defn -main
+(defn -main 
   [& args]
-  (println "lo World"))
+  (print "hi"))
 
-(defn present-board 
-  [board-values]
-  (print board-values))
