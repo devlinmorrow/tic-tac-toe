@@ -1,13 +1,23 @@
-(ns tic-tac-toe.board)
+(ns tic-tac-toe.board
+  (:require [tic-tac-toe.marks :refer :all]))
 
-(def initial-board [1 2 3 4 5 6 7 8 9])
-
-(def grid-size 3)
+(defn make-initial-board
+  [grid-size]
+  (into [] (map str (range 1 (+ (* grid-size grid-size) 1)))))
 
 (defn present-board
   [board-values]
-  (print (clojure.string/join (apply concat (interpose ["\n"] (partition grid-size (map (fn [x] (str x " ")) (into [] board-values)))))) "\n"))
+  (print (clojure.string/join (apply concat (interpose ["\n"] (partition (int (Math/sqrt (count board-values))) (map (fn [x] (str x " ")) (into [] board-values)))))) "\n"))
 
 (defn place-mark
   [board position mark]
   (assoc board position mark))
+
+(defn eq-mark-one-or-two
+  [mark]
+  (or (= mark player-one-mark) (= mark player-two-mark)))
+
+(defn is-full?
+  [board]
+  (every? (fn [mark] (eq-mark-one-or-two mark)) board))
+

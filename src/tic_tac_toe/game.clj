@@ -8,7 +8,7 @@
   []
   (do 
     (println welcome-message)
-    (present-board initial-board)))
+    (present-board (make-initial-board 3))))
 
 (defn make-move
   [current-board]
@@ -16,7 +16,7 @@
 
 (defn play-all-turns
   []
-  (loop [current-board initial-board]
+  (loop [current-board (make-initial-board 3)]
     (do 
       (let [current-board (make-move current-board)]
         (newline)
