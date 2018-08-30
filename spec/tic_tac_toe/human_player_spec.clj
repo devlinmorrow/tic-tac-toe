@@ -6,10 +6,10 @@
           (it "asks user for tile number selection"
               (should= "3"
                        (with-in-str "3"
-                         (get-user-tile-choice)))))
+                         (get-user-tile-choice [1 2 3 4 5 6 7 8 9])))))
 
 (describe "get-tile-number"
           (it "gets tile number"
               (should= 3
                        (with-in-str "3"
-                         (get-tile-number)))))
+                         (get-tile-number [1 2 3 4 5 6 7 8 9])))))

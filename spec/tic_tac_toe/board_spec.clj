@@ -7,9 +7,9 @@
 (describe "present-board"
           (it "displays a 3x3 board"
               (should= "1 2 3 \n4 5 6 \n7 8 9  \n"
-                       (with-out-str (present-board 3 example-board)))))
+                       (with-out-str (present-board example-board)))))
 
 (describe "place-mark"
           (it "replaces element of grid with given mark"
               (should= [1 2 "X" 4 5 6 7 8 9]
-                       (place-mark 2 "X"))))
+                       (place-mark initial-board 2 "X"))))
