@@ -1,6 +1,6 @@
-(ns tic-tac-toe.core)
+(ns tic-tac-toe.core
+  (:require [tic-tac-toe.game :refer :all]))
 
 (defn -main 
-  [& args]
-  (print "hi"))
-
+  []
+  (run))
