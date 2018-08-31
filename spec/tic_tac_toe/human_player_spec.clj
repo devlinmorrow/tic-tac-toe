@@ -2,14 +2,16 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.human-player :refer :all]))
 
+(def example-board (into [] (map str (range 1 10))))
+
 (describe "get-user-tile-choice"
           (it "asks user for tile number selection"
               (should= "3"
                        (with-in-str "3"
-                         (get-user-tile-choice [1 2 3 4 5 6 7 8 9])))))
+                         (get-user-tile-choice example-board)))))
 
-(describe "get-tile-number"
+(describe "get-tile-from-human"
           (it "gets tile number"
-              (should= 3
+              (should= 2
                        (with-in-str "3"
-                         (get-tile-number [1 2 3 4 5 6 7 8 9])))))
+                         (get-tile-from-human example-board)))))

@@ -4,10 +4,11 @@
             [tic-tac-toe.marks :refer :all]))
 
 (describe "switch-player"
-          (it "returns player one mark if currently player two"
-              (should= player-one-mark
-                       (switch-player player-two-mark)))
+          (let [player-one {:type :human :mark "X"} player-two {:type :human :mark "O"}]
+            (it "returns player one mark if currently player two"
+                (should= player-one
+                         (switch-player player-two player-one player-two)))
 
-          (it "returns player two mark if currently player two"
-              (should= player-two-mark
-                       (switch-player player-one-mark))))
+            (it "returns player two mark if currently player two"
+                (should= player-two
+                         (switch-player player-one player-one player-two)))))

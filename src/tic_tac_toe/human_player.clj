@@ -7,6 +7,6 @@
     (println ask-for-choice)
     (read-line)))
 
-(defn get-tile-number 
+(defn get-tile-from-human
   [board]
-  (read-string (get-user-tile-choice board)))
+  (- (read-string (get-user-tile-choice board)) 1))
