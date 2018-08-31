@@ -10,23 +10,30 @@
     (println welcome-message)
     (present-board (make-initial-board 3))))
 
+(defn switch-player
+  [mark]
+  (if (= mark player-one-mark) player-two-mark
+    player-one-mark))
+
 (defn make-move
-  [current-board]
-  (place-mark current-board (- (get-tile-number current-board) 1) player-one-mark))
+  [current-board current-player]
+  (place-mark current-board (- (get-tile-number current-board) 1) current-player))
 
 (defn play-all-turns
   []
-  (loop [current-board (make-initial-board 3)]
+  (loop [current-board (make-initial-board 3) 
+         current-player player-two-mark]
     (cond 
-      (winner? current-board) (println "winner")
+      (winner? current-board) (println (winner-message current-player))
       (is-full? current-board) (println draw-message)
       :else (do 
-              (let [current-board (make-move current-board)]
+              (let [current-player (switch-player current-player)
+                    current-board (make-move current-board current-player)]
                 (newline)
                 (println picked-tile-message)
                 (present-board current-board)
                 (newline)
-                (recur current-board))))))
+                (recur current-board current-player))))))
 
 (defn run
   []
