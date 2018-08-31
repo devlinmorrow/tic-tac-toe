@@ -17,18 +17,19 @@
 (defn play-all-turns
   []
   (loop [current-board (make-initial-board 3)]
-    (if (is-full? current-board)
-      (println draw-message)
-      (do 
-        (let [current-board (make-move current-board)]
-          (newline)
-          (println picked-tile-message)
-          (present-board current-board)
-          (newline)
-          (recur current-board))))))
+    (cond 
+      (winner? current-board) (println "winner")
+      (is-full? current-board) (println draw-message)
+      :else (do 
+              (let [current-board (make-move current-board)]
+                (newline)
+                (println picked-tile-message)
+                (present-board current-board)
+                (newline)
+                (recur current-board))))))
 
-  (defn run
-    []
-    (do
-      (start-message)
-      (play-all-turns)))
+(defn run
+  []
+  (do
+    (start-message)
+    (play-all-turns)))

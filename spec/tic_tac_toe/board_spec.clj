@@ -23,9 +23,33 @@
 (describe "is-full?"
           (it "is true when board is full of mix of player one and two marks"
               (let [full-board (conj (vec (repeat 8 player-one-mark)) player-two-mark)]
-                    (should
-                      (is-full? full-board))))
+                (should (is-full? full-board))))
 
-                    (it "is false when board is not full"
-                        (should= false
-                                 (is-full? example-board))))
+          (it "is false when board is not full"
+              (should-not (is-full? example-board))))
+
+(describe "top-row-winner"
+          (it "returns player one mark when player one wins on top row"
+              (should= player-one-mark
+                      (top-row-winner? [player-one-mark player-one-mark player-one-mark 
+                                        "4" "5" "6" "7" "8" "9"])))
+
+          (it "returns player two mark when player two wins on top row"
+              (should= player-two-mark
+                      (top-row-winner? [player-two-mark player-two-mark player-two-mark 
+                                        player-one-mark player-one-mark "6" "7" "8" "9"])))
+
+          (it "is false when no winner"
+              (should-not (top-row-winner? example-board))))
+
+(describe "winner?"
+          (it "returns player one mark when player one wins (right column)"
+              (should= player-one-mark
+                      (winner? ["1" "2" player-one-mark "4" "5" player-one-mark "7" "8" player-one-mark])))
+
+          (it "returns player two mark when player two wins (botleft diag)"
+              (should= player-two-mark
+                       (winner? ["1" "2" player-two-mark "4" player-two-mark "6" player-two-mark "8" "9"])))
+
+          (it "is false when no winner"
+              (should-not (top-row-winner? example-board))))
