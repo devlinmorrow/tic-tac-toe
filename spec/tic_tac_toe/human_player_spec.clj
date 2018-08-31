@@ -4,7 +4,7 @@
             [tic-tac-toe.human-player :refer :all]
             [tic-tac-toe.marks :refer [player-one-mark]]))
 
-(describe "get-tile-number"
+(describe "get-tile-from-human"
           (it "gets tile position on second attempt, when first is already marked"
               (let [marked-tile-choice "3"
                     unmarked-tile-choice "9"

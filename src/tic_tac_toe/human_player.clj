@@ -10,7 +10,7 @@
   (send-message ask-for-choice)
   (- (read-string (read-line)) 1))
 
-(defn get-tile-number 
+(defn get-tile-from-human
   [board]
   (loop [tile-choice (get-user-tile-choice)]
     (if (tile-marked? board tile-choice)
