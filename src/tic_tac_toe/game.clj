@@ -32,7 +32,7 @@
 
 (defn make-move
   [current-board current-player]
-  (place-mark current-board (get-tile-number current-board) current-player))
+  (place-mark current-board ((get-tile (:mark current-player)) current-board) (:mark current-player)))
 
 (defn present-move 
   [board]

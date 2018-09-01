@@ -16,5 +16,5 @@
 
 (defn -main 
   []
-  (let [players get-players]
+  (let [players (get-players)]
   (run (get players 0) (get players 1))))

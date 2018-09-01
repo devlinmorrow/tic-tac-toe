@@ -10,7 +10,7 @@
                 (should= player-one
                          (switch-player player-two player-one player-two)))
 
-            (it "returns player two mark if currently player two"
+            (it "returns player two mark if currently player one"
                 (should= player-two
                          (switch-player player-one player-one player-two)))))
 
