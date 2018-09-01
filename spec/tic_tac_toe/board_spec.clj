@@ -28,20 +28,6 @@
           (it "is false when board is not full"
               (should-not (is-full? example-board))))
 
-(describe "top-row-winner"
-          (it "returns player one mark when player one wins on top row"
-              (should= player-one-mark
-                      (top-row-winner? [player-one-mark player-one-mark player-one-mark 
-                                        "4" "5" "6" "7" "8" "9"])))
-
-          (it "returns player two mark when player two wins on top row"
-              (should= player-two-mark
-                      (top-row-winner? [player-two-mark player-two-mark player-two-mark 
-                                        player-one-mark player-one-mark "6" "7" "8" "9"])))
-
-          (it "is false when no winner"
-              (should-not (top-row-winner? example-board))))
-
 (describe "winner?"
           (it "returns player one mark when player one wins (right column)"
               (should= player-one-mark

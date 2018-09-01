@@ -25,7 +25,7 @@
 
 (defn make-move
   [current-board current-player]
-  (place-mark current-board ((get-tile (:mark current-player)) current-board) current-player))
+  (place-mark current-board ((get-tile (:mark current-player)) current-board) (:mark current-player)))
 
 (defn play-all-turns
   [player-one player-two]
