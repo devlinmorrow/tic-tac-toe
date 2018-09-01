@@ -2,8 +2,9 @@
   (:require [tic-tac-toe.marks :refer :all]))
 
 (defn make-initial-board
-  [grid-size]
-  (into [] (map str (range 1 (+ (* grid-size grid-size) 1)))))
+  []
+  (let [grid-size 3]
+  (into [] (map str (range 1 (+ (* grid-size grid-size) 1))))))
 
 (defn present-board
   [board-values]

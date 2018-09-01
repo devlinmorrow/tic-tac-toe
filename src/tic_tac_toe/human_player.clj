@@ -1,5 +1,5 @@
 (ns tic-tac-toe.human-player
-  (:require [tic-tac-toe.messages :refer :all]))
+  (:require [tic-tac-toe.messages :refer [ask-for-choice]]))
 
 (defn get-user-tile-choice
   [board]

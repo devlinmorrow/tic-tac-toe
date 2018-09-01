@@ -8,7 +8,7 @@
 (describe "make initial board"
           (it "makes a board according to the grid size provided"
               (should= example-board
-                       (make-initial-board 3))))
+                       (make-initial-board))))
 
 (describe "present-board"
           (it "displays a 3x3 board"
@@ -18,7 +18,7 @@
 (describe "place-mark"
           (it "replaces element of grid with given mark"
               (should= (assoc example-board 2 "X")
-                       (place-mark (make-initial-board 3) 2 "X"))))
+                       (place-mark (make-initial-board) 2 "X"))))
 
 (describe "is-full?"
           (it "is true when board is full of mix of player one and two marks"

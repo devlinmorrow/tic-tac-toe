@@ -1,13 +1,20 @@
 (ns tic-tac-toe.game
-  (:require [tic-tac-toe.board :refer :all]
-            [tic-tac-toe.human-player :refer :all]
+  (:require [tic-tac-toe.board :refer [present-board
+                                       make-initial-board
+                                       place-mark
+                                       winner?
+                                       is-full?]]
+            [tic-tac-toe.human-player :refer [get-tile-number]]
             [tic-tac-toe.marks :refer :all]
-            [tic-tac-toe.messages :refer :all]))
+            [tic-tac-toe.messages :refer [welcome-message
+                                          picked-tile-message
+                                          winner-message
+                                          draw-message]]))
 
 (defn start-message
   []
     (println welcome-message)
-    (present-board (make-initial-board 3)))
+    (present-board (make-initial-board)))
 
 (defn switch-player
   [mark]
@@ -27,7 +34,7 @@
 
 (defn play-all-turns
   []
-  (loop [current-board (make-initial-board 3) 
+  (loop [current-board (make-initial-board) 
          current-player player-one-mark]
     (let [current-board (make-move current-board current-player)]
       (present-move current-board)
