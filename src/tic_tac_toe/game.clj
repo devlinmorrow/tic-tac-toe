@@ -1,5 +1,5 @@
 (ns tic-tac-toe.game
-  (:require [tic-tac-toe.board :refer [present-board
+  (:require [tic-tac-toe.board :refer [format-board-cli
                                        make-initial-board
                                        place-mark
                                        winner?
@@ -14,7 +14,7 @@
 (defn start-message
   []
     (println welcome-message)
-    (present-board (make-initial-board)))
+    (println (format-board-cli (make-initial-board))))
 
 (defn switch-player
   [mark]
@@ -29,7 +29,7 @@
   [board]
     (newline)
     (println picked-tile-message)
-    (present-board board)
+    (print (format-board-cli board))
     (newline))
 
 (defn play-all-turns
