@@ -23,7 +23,7 @@
 
 (defn make-move
   [current-board current-player]
-  (place-mark current-board (- (get-tile-number current-board) 1) current-player))
+  (place-mark current-board (get-tile-number current-board) current-player))
 
 (defn present-move 
   [board]
