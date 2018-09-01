@@ -17,3 +17,4 @@
               (let [empty-board (into [] (map str (range 1 10)))]
                 (should= [player-one-mark "2" "3" "4" "5" "6" "7" "8" "9"]
                          (with-in-str "1" (make-move empty-board player-one-mark))))))
+

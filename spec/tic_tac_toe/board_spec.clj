@@ -28,28 +28,46 @@
           (it "is false when board is not full"
               (should-not (is-full? example-board))))
 
-(describe "top-row-winner"
-          (it "returns player one mark when player one wins on top row"
+(describe "winner?"
+          (it "(top row) returns player one mark when player one wins"
               (should= player-one-mark
-                      (top-row-winner? [player-one-mark player-one-mark player-one-mark 
+                      (winner? [player-one-mark player-one-mark player-one-mark 
                                         "4" "5" "6" "7" "8" "9"])))
 
-          (it "returns player two mark when player two wins on top row"
-              (should= player-two-mark
-                      (top-row-winner? [player-two-mark player-two-mark player-two-mark 
-                                        player-one-mark player-one-mark "6" "7" "8" "9"])))
-
-          (it "is false when no winner"
-              (should-not (top-row-winner? example-board))))
-
-(describe "winner?"
-          (it "returns player one mark when player one wins (right column)"
+          (it "(mid row) returns player one mark when player one wins"
               (should= player-one-mark
-                      (winner? ["1" "2" player-one-mark "4" "5" player-one-mark "7" "8" player-one-mark])))
+                      (winner? ["1" "2" "3" player-one-mark player-one-mark 
+                                player-one-mark "7" "8" "9"])))
+; ["1" "2" "3" "4" "5" "6" "7" "8" "9"]
+          (it "(bot row) returns player one mark when player one wins"
+              (should= player-one-mark
+                      (winner? ["1" "2" "3" "4" "5" "6" player-one-mark 
+                                player-one-mark player-one-mark])))
 
-          (it "returns player two mark when player two wins (botleft diag)"
+          (it "(left col) returns player one mark when player one wins"
+              (should= player-one-mark
+                      (winner? [player-one-mark "2" "3" player-one-mark 
+                                "5" "6" player-one-mark "8" "9"])))
+
+          (it "(mid col) returns player one mark when player one wins"
+              (should= player-one-mark
+                      (winner? ["1" player-one-mark "3" "4" player-one-mark 
+                                "6" "7" player-one-mark "9"])))
+
+          (it "(right col) returns player one mark when player one wins"
+              (should= player-one-mark
+                      (winner? ["1" "2" player-one-mark "4" "5" player-one-mark 
+                                "7" "8" player-one-mark])))
+
+          (it "(topleft diag) returns player two mark when player two wins"
               (should= player-two-mark
-                       (winner? ["1" "2" player-two-mark "4" player-two-mark "6" player-two-mark "8" "9"])))
+                       (winner? [player-two-mark "2" "3" "4" player-two-mark 
+                                 "6" "7" "8" player-two-mark])))
+
+          (it "(botleft diag) returns player two mark when player two wins"
+              (should= player-two-mark
+                       (winner? ["1" "2" player-two-mark "4" player-two-mark 
+                                 "6" player-two-mark "8" "9"])))
 
           (it "is false when no winner"
               (should-not (top-row-winner? example-board))))
