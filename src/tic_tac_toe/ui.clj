@@ -1,5 +1,6 @@
 (ns tic-tac-toe.ui
-  (:require [tic-tac-toe.messages :refer [ask-for-choice]]))
+  (:require [tic-tac-toe.messages :refer [ask-for-choice
+                                          not-integer-message]]))
 
 (defn format-board-cli
   [board-values]
@@ -9,7 +10,17 @@
   [message]
   (println message))
 
-(defn get-user-tile-choice []
+(defn get-user-choice []
   (newline)
   (send-message ask-for-choice)
-  (read-string (read-line)))
+  (read-line))
+
+
+(defn get-user-tile-choice []
+  (loop [tile-choice (get-user-choice)]
+    (if (re-matches #"\d+" tile-choice)
+      (read-string tile-choice)
+      (do (send-message not-integer-message)
+          (recur (get-user-choice))))))
+
+

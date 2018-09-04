@@ -11,6 +11,8 @@
 
 (def choice-out-of-range-message "Uhoh, that's not in range!")
 
+(def not-integer-message "Uhoh, that's not a real number!")
+
 (def picked-tile-message "Here is the choice: ")
 
 (def draw-message "It was a draw...")

@@ -16,8 +16,10 @@
                          (with-out-str (send-message message))))))
 
 (describe "get-user-tile-choice"
-          (it "gets tile choice from UI and converts to number"
-              (let [tile-choice "3"]
+          (it "gets tile choice from UI and converts to number on second attempt, after first
+              attempt is not an integer"
+              (let [non-int-choice "3asv"
+                    tile-choice "3"]
                 (should= 3 
-                         (with-in-str "3" (get-user-tile-choice))))))
+                         (with-in-str (str non-int-choice "\n" tile-choice) (get-user-tile-choice))))))
                         
