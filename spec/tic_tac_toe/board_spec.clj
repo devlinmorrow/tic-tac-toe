@@ -10,11 +10,14 @@
               (should= empty-board
                        (make-initial-board))))
 
-(describe "format-board-cli"
-          (it "formats the board for CLI"
-              (let [cli-formatted-board "1 2 3 \n4 5 6 \n7 8 9 "]
-                (should= cli-formatted-board
-                         (format-board-cli empty-board)))))
+(describe "in-range?"
+          (it "is true when tile picked is within range"
+              (let [position 3]
+              (should (in-range? empty-board position))))
+
+          (it "is false when tile picked is not within range"
+              (let [position 15]
+              (should-not (in-range? empty-board position)))))
 
 (describe "tile-marked?"
           (let [position 0]

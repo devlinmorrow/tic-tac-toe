@@ -6,13 +6,9 @@
   (let [grid-size 3]
   (into [] (map str (range 1 (+ (* grid-size grid-size) 1))))))
 
-(defn format-board-cli
-  [board-values]
-  (clojure.string/join (apply concat (interpose ["\n"] (partition (int (Math/sqrt (count board-values))) (map (fn [x] (str x " ")) (into [] board-values)))))))
-
-(defn place-mark
-  [board position mark]
-  (assoc board position mark))
+(defn in-range?
+  [board position]
+  (get board position))
 
 (defn- eq-mark-one-or-two
   [mark]
@@ -21,6 +17,10 @@
 (defn tile-marked?
   [board position]
   (eq-mark-one-or-two (get board position)))
+
+(defn place-mark
+  [board position mark]
+  (assoc board position mark))
 
 (defn is-full?
   [board]

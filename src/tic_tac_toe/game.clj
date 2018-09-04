@@ -1,6 +1,5 @@
 (ns tic-tac-toe.game
-  (:require [tic-tac-toe.board :refer [format-board-cli
-                                       make-initial-board
+  (:require [tic-tac-toe.board :refer [make-initial-board
                                        place-mark
                                        winner?
                                        is-full?]]
@@ -9,12 +8,14 @@
             [tic-tac-toe.messages :refer [welcome-message
                                           picked-tile-message
                                           winner-message
-                                          draw-message]]))
+                                          draw-message]]
+            [tic-tac-toe.ui :refer [format-board-cli
+                                    send-message]]))
 
 (defn start-message
   []
-    (println welcome-message)
-    (println (format-board-cli (make-initial-board))))
+  (send-message welcome-message)
+  (send-message (format-board-cli (make-initial-board))))
 
 (defn switch-player
   [mark]
@@ -27,10 +28,9 @@
 
 (defn present-move 
   [board]
-    (newline)
-    (println picked-tile-message)
-    (print (format-board-cli board))
-    (newline))
+  (newline)
+  (send-message picked-tile-message)
+  (send-message (format-board-cli board)))
 
 (defn play-all-turns
   []
@@ -39,11 +39,11 @@
     (let [current-board (make-move current-board current-player)]
       (present-move current-board)
       (cond
-        (winner? current-board) (println (winner-message current-player))
-        (is-full? current-board) (println draw-message)
+        (winner? current-board) (send-message (winner-message current-player))
+        (is-full? current-board) (send-message draw-message)
         :else (recur current-board (switch-player current-player))))))
 
 (defn run
   []
-    (start-message)
-    (play-all-turns))
+  (start-message)
+  (play-all-turns))
