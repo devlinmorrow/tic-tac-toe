@@ -11,4 +11,4 @@
                     final-position-picked 8]
                 (should= final-position-picked
                          (with-in-str (str marked-tile-choice "\n" unmarked-tile-choice)
-                             (get-tile-number (assoc empty-board 2 player-one-mark)))))))
+                             (get-tile-from-human (assoc empty-board 2 player-one-mark)))))))

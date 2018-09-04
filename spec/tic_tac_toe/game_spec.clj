@@ -13,8 +13,3 @@
             (it "returns player two mark if currently player one"
                 (should= player-two
                          (switch-player player-one player-one player-two)))))
-
-(describe "make-move"
-          (it "asks current player for tile number and places mark on board"
-                (should= [player-one-mark "2" "3" "4" "5" "6" "7" "8" "9"]
-                         (with-in-str "1" (make-move empty-board player-one-mark)))))

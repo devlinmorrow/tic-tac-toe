@@ -4,7 +4,7 @@
                                        winner?
                                        is-full?]]
             [tic-tac-toe.dumb-comp :refer :all]
-            [tic-tac-toe.human-player :refer [get-tile-number]]
+            [tic-tac-toe.human-player :refer [get-tile-from-human]]
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.messages :refer [welcome-message
                                           picked-tile-message
@@ -32,7 +32,7 @@
 
 (defn make-move
   [current-board current-player]
-  (place-mark current-board ((get-tile (:mark current-player)) current-board) (:mark current-player)))
+  (place-mark current-board (get-tile-from-human current-board) (:mark current-player)))
 
 (defn present-move 
   [board]
@@ -43,7 +43,7 @@
 (defn play-all-turns
   [player-one player-two]
   (loop [current-board (make-initial-board) 
-         current-player player-one-mark]
+         current-player player-one]
     (let [current-board (make-move current-board current-player)]
       (present-move current-board)
       (cond

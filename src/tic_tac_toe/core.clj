@@ -1,18 +1,21 @@
 (ns tic-tac-toe.core
-  (:require [tic-tac-toe.game :refer [run]]))
-            [tic-tac-toe.messages :refer :all]))
+  (:require [tic-tac-toe.game :refer [run]]
+            [tic-tac-toe.messages :refer [ask-for-mode]]
+            [tic-tac-toe.ui :refer [send-message]]))
+
+(def game-modes {1 [{:type :human :mark "X"} {:type :human :mark "O"}] 
+                 2 [{:type :human :mark "X"} {:type :comp :mark "O"}]
+                 3 [{:type :comp :mark "X"} {:type :comp :mark "O"}]})
 
 (defn ask-mode []
-  (do
-    (println ask-for-mode)
-    (read-string (read-line))))
+    (send-message ask-for-mode)
+    (read-string (read-line)))
 
 (defn get-players []
-  (let [mode (ask-mode)]
-    (cond
-      (= 1 mode) [{:type :human :mark "X"} {:type :human :mark "O"}]
-      (= 2 mode) [{:type :human :mark "X"} {:type :comp :mark "O"}]
-      (= 3 mode) [{:type :comp :mark "X"} {:type :comp :mark "O"}])))
+  (loop [mode (ask-mode)]
+      (if (game-modes mode) 
+        (game-modes mode)
+        (recur (ask-mode)))))
 
 (defn -main 
   []

@@ -1,4 +1,4 @@
-(ns tic-tac-toe.ui
+(ns tic-tac-toe.ui-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.board-spec :refer [empty-board]]
             [tic-tac-toe.ui :refer :all]))
