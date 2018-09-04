@@ -24,15 +24,15 @@
     player-two
     player-one))
 
-(defn get-tile
+(defn get-tile-number
   [player-type]
-  (if (= player-one-mark player-type)
+  (if (= :human player-type)
     get-tile-from-human
     get-tile-from-dumb-comp))
 
 (defn make-move
   [current-board current-player]
-  (place-mark current-board (get-tile-from-human current-board) (:mark current-player)))
+  (place-mark current-board ((get-tile-number (current-player :type)) current-board) (current-player :mark)))
 
 (defn present-move 
   [board]
