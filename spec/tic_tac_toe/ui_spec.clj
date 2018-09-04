@@ -14,3 +14,10 @@
               (let [message "Hello, world!"]
                 (should= (str message "\n")
                          (with-out-str (send-message message))))))
+
+(describe "get-user-tile-choice"
+          (it "gets tile choice from UI and converts to number"
+              (let [tile-choice "3"]
+                (should= 3 
+                         (with-in-str "3" (get-user-tile-choice))))))
+                        

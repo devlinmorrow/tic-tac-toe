@@ -1,4 +1,5 @@
-(ns tic-tac-toe.ui)
+(ns tic-tac-toe.ui
+  (:require [tic-tac-toe.messages :refer [ask-for-choice]]))
 
 (defn format-board-cli
   [board-values]
@@ -7,3 +8,8 @@
 (defn send-message
   [message]
   (println message))
+
+(defn get-user-tile-choice []
+  (newline)
+  (send-message ask-for-choice)
+  (read-string (read-line)))
