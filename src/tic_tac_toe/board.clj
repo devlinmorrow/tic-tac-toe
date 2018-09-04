@@ -6,9 +6,9 @@
   (let [grid-size 3]
   (into [] (map str (range 1 (+ (* grid-size grid-size) 1))))))
 
-(defn in-range?
+(defn not-in-range?
   [board position]
-  (get board position))
+  (if (get board position) false true))
 
 (defn- eq-mark-one-or-two
   [mark]

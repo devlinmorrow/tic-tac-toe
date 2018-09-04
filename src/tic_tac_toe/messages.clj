@@ -9,6 +9,8 @@
 
 (def already-picked-message "Uhoh, that one's taken!")
 
+(def choice-out-of-range-message "Uhoh, that's not in range!")
+
 (def picked-tile-message "Here is the choice: ")
 
 (def draw-message "It was a draw...")

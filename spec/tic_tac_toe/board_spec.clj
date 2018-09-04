@@ -10,14 +10,14 @@
               (should= empty-board
                        (make-initial-board))))
 
-(describe "in-range?"
-          (it "is true when tile picked is within range"
+(describe "not-in-range?"
+          (it "is false when tile picked is within range"
               (let [position 3]
-              (should (in-range? empty-board position))))
+              (should-not (not-in-range? empty-board position))))
 
-          (it "is false when tile picked is not within range"
+          (it "is true when tile picked is not within range"
               (let [position 15]
-              (should-not (in-range? empty-board position)))))
+              (should (not-in-range? empty-board position)))))
 
 (describe "tile-marked?"
           (let [position 0]
