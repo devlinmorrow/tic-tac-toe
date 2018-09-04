@@ -13,11 +13,11 @@
 (describe "not-in-range?"
           (it "is false when tile picked is within range"
               (let [position 3]
-              (should-not (not-in-range? empty-board position))))
+                (should-not (not-in-range? empty-board position))))
 
           (it "is true when tile picked is not within range"
               (let [position 15]
-              (should (not-in-range? empty-board position)))))
+                (should (not-in-range? empty-board position)))))
 
 (describe "tile-marked?"
           (let [position 0]
@@ -85,3 +85,30 @@
 
           (it "is false when no winner"
               (should-not (winner? empty-board))))
+
+(describe "terminal-state?"
+          (it "is true when there is a winner"
+              (let [won-board [player-one-mark player-one-mark player-one-mark
+                               "4" "5" "6" "7" "8" "9"]]
+                (should (terminal-state? won-board))))
+
+          (it "is true when it is a tie"
+              (let [tied-board [player-one-mark player-one-mark player-two-mark
+                                player-two-mark player-two-mark player-one-mark
+                                player-one-mark player-one-mark player-two-mark]]
+                (should (terminal-state? tied-board))))
+
+          (it "is false when not in terminal state"
+              (should-not (terminal-state? empty-board))))
+
+(describe "get-indices-empty-tiles"
+          (it "returns indices of all empty tiles"
+              (let [all-empty (into [] (range 9))]
+                    (should= all-empty
+                             (get-indices-empty-tiles empty-board))))
+
+          (it "returns indices of only empty tiles"
+              (let [ex-board [player-one-mark "2" "3" player-two-mark "5" "6" "7" "8" "9"]
+                    ex-indices [1 2 4 5 6 7 8]]
+                (should= ex-indices
+                         (get-indices-empty-tiles ex-board)))))
