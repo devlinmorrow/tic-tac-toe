@@ -26,29 +26,24 @@
   [board]
   (every? (fn [mark] (eq-mark-one-or-two mark)) board))
 
+(defn line-winning?
+  [board pos-1 pos-2 pos-3]
+  (let [line [(get board pos-1) (get board pos-2) (get board pos-3)]]
+    (cond
+      (every? (fn [mark] (= player-one-mark mark)) line) player-one-mark
+      (every? (fn [mark] (= player-two-mark mark)) line) player-two-mark)))
+
 (defn- top-row-winner?
   [board]
-  (let [top-row [(get board 0) (get board 1) (get board 2)]]
-    (cond
-      (every? (fn [mark] (= player-one-mark mark)) top-row) player-one-mark
-      (every? (fn [mark] (= player-two-mark mark)) top-row) player-two-mark
-      :else false)))
+  (line-winning? board 0 1 2))
 
 (defn- mid-row-winner?
   [board]
-  (let [top-row [(get board 3) (get board 4) (get board 5)]]
-    (cond
-      (every? (fn [mark] (= player-one-mark mark)) top-row) player-one-mark
-      (every? (fn [mark] (= player-two-mark mark)) top-row) player-two-mark
-      :else false)))
+  (line-winning? board 3 4 5))
 
 (defn- bot-row-winner?
   [board]
-  (let [top-row [(get board 6) (get board 7) (get board 8)]]
-    (cond
-      (every? (fn [mark] (= player-one-mark mark)) top-row) player-one-mark
-      (every? (fn [mark] (= player-two-mark mark)) top-row) player-two-mark
-      :else false)))
+  (line-winning? board 6 7 8))
 
 (defn- row-winner?
   [board]
@@ -59,27 +54,15 @@
 
 (defn- lft-col-winner?
   [board]
-  (let [top-row [(get board 0) (get board 3) (get board 6)]]
-    (cond
-      (every? (fn [mark] (= player-one-mark mark)) top-row) player-one-mark
-      (every? (fn [mark] (= player-two-mark mark)) top-row) player-two-mark
-      :else false)))
+  (line-winning? board 0 3 6))
 
 (defn- mid-col-winner?
   [board]
-  (let [top-row [(get board 1) (get board 4) (get board 7)]]
-    (cond
-      (every? (fn [mark] (= player-one-mark mark)) top-row) player-one-mark
-      (every? (fn [mark] (= player-two-mark mark)) top-row) player-two-mark
-      :else false)))
+  (line-winning? board 1 4 7))
 
 (defn- rt-col-winner?
   [board]
-  (let [top-row [(get board 2) (get board 5) (get board 8)]]
-    (cond
-      (every? (fn [mark] (= player-one-mark mark)) top-row) player-one-mark
-      (every? (fn [mark] (= player-two-mark mark)) top-row) player-two-mark
-      :else false)))
+  (line-winning? board 2 5 8))
 
 (defn- col-winner?
   [board]
@@ -90,19 +73,11 @@
 
 (defn- toplft-diag-winner?
   [board]
-  (let [top-row [(get board 0) (get board 4) (get board 8)]]
-    (cond
-      (every? (fn [mark] (= player-one-mark mark)) top-row) player-one-mark
-      (every? (fn [mark] (= player-two-mark mark)) top-row) player-two-mark
-      :else false)))
+  (line-winning? board 0 4 8))
 
 (defn- botlft-diag-winner?
   [board]
-  (let [top-row [(get board 6) (get board 4) (get board 2)]]
-    (cond
-      (every? (fn [mark] (= player-one-mark mark)) top-row) player-one-mark
-      (every? (fn [mark] (= player-two-mark mark)) top-row) player-two-mark
-      :else false)))
+  (line-winning? board 6 4 2))
 
 (defn- diags-winner?
   [board]
