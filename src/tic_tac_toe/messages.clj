@@ -3,3 +3,13 @@
 (def welcome-message "Welcome to Tic Tac Toe!")
 
 (def ask-for-choice "Please pick a tile number.")
+
+(def already-picked-message "Uhoh, that one's taken!")
+
+(def picked-tile-message "Here is the choice: ")
+
+(def draw-message "It was a draw...")
+
+(defn winner-message
+  [player-mark]
+  (str "Player " player-mark " won!"))

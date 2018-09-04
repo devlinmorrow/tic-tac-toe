@@ -1,12 +1,21 @@
 (ns tic-tac-toe.human-player
-  (:require [tic-tac-toe.messages :refer :all]))
+  (:require [tic-tac-toe.board :refer [tile-marked?]]
+            [tic-tac-toe.messages :refer [ask-for-choice
+                                          already-picked-message]]
+            [tic-tac-toe.ui :refer [send-message]]))
 
-(defn get-user-tile-choice
+(defn- get-user-tile-choice
   []
-  (do
-    (println ask-for-choice)
-    (read-line)))
+  (newline)
+  (send-message ask-for-choice)
+  (- (read-string (read-line)) 1))
 
-(defn get-tile-number
-  []
-  (read-string (get-user-tile-choice)))
+(defn get-tile-number 
+  [board]
+  (loop [tile-choice (get-user-tile-choice)]
+    (if (tile-marked? board tile-choice)
+      (do
+        (newline)
+        (send-message already-picked-message)
+        (recur (get-user-tile-choice)))
+      tile-choice)))
