@@ -1,43 +1,58 @@
 (ns tic-tac-toe.unbeatable-comp
   (:require [tic-tac-toe.board :refer :all]))
 
-(defn score-win
-  [board optimising-player]
-  (if (= (winner? board) optimising-player) 
-    10
-    -10))
+(declare score-moves)
 
-(defn score-terminal-board
-  [board optimising-player]
-  (if (winner? board) 
-    (score-win board optimising-player)
-    0))
+(def max-value-score 10)
+(def tie-score 0)
 
-(defn emulate-move
-  [board move optimising-player]
-  (place-mark board move optimising-player))
+(defn maximising-level?
+  [depth]
+  (boolean (= (mod depth 2) 0)))
+
+(defn get-min
+  [moves]
+  (val (apply min-key val moves)))
+
+(defn get-max
+  [moves]
+  (val (apply max-key val moves)))
+
+(defn get-minimax-score
+  [depth moves]
+  (if (maximising-level? depth)
+    (get-max moves)
+    (get-min moves)))
+
+(defn get-score-for-winner
+  [board minimaxer depth]
+    (if (= (winner? board) minimaxer)
+      (- max-value-score depth)
+      (- (- max-value-score depth))))
 
 (defn get-score
-  [board move optimising-player]
-  (let [emulated-board (emulate-move board move optimising-player)]
-    (score-terminal-board emulated-board optimising-player)))
+  [board minimaxer opponent depth]
+  (cond 
+    (winner? board) (get-score-for-winner board minimaxer depth)
+    (is-full? board) tie-score
+    :else (get-minimax-score depth (score-moves board opponent minimaxer depth))))
 
-(defn build-scores
-  [board optimising-player]
-  (let [empty-tiles (get-indices-empty-tiles board)]
-    (into [] (map (fn [empty-tile] (get-score board empty-tile optimising-player)) empty-tiles))))
+(defn get-mark-at-depth
+  [depth minimaxer opponent]
+  (if (maximising-level? depth)
+    minimaxer
+    opponent))
 
-(defn get-index-of-max-score
-  [scores]
-  (.indexOf scores (apply max scores)))
-
-(defn match-best-score-to-tile
-  [empty-tiles scores]
-  (get empty-tiles (get-index-of-max-score scores)))
-
-(defn get-tile-unbeatable-comp
-  [board optimising-player opponent]
+(defn score-moves 
+  [board minimaxer opponent depth]
   (let [empty-tiles (get-indices-empty-tiles board)
-        scores (build-scores board optimising-player)]
-    (match-best-score-to-tile empty-tiles scores)))
+        scores (map (fn [empty-tile] get-score (place-mark board empty-tile (get-mark-at-depth depth minimaxer opponent)) minimaxer opponent (inc depth)) empty-tiles)]
+    (zipmap empty-tiles scores)))
 
+(defn get-best-move
+  [moves]
+  (key (apply max-key val moves)))
+
+(defn minimax
+  [board minimaxer opponent]
+  (get-best-move (score-moves board minimaxer opponent 0)))
