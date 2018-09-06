@@ -7,16 +7,16 @@
 (describe "get-tile-unbeatable-comp"
           (it "gets winning tile position - 1"
 
-              ; O X O
+              ; O X X
               ; O O X
               ; X 8 9 
               ; optimum move: 9 (position 8)
 
-              (let [board [player-two-mark player-one-mark player-two-mark
+              (let [board [player-two-mark player-one-mark player-one-mark 
                            player-two-mark player-two-mark player-one-mark
                            player-one-mark "8" "9"]]
                 (should= 8
-                         (minimax board player-two-mark player-one-mark))))
+                         (choose-best-space board player-two-mark))))
 
           (it "gets winning tile position - 2"
 
@@ -29,7 +29,7 @@
                            "4" "5" player-one-mark
                            player-one-mark player-two-mark player-two-mark]]
                 (should= 4
-                         (minimax board player-two-mark player-one-mark))))
+                         (choose-best-space board player-two-mark))))
 
           (it "gets winning tile position - 3"
 
@@ -42,7 +42,7 @@
                            player-one-mark "5" "6"
                            player-one-mark player-two-mark player-two-mark]]
                 (should= 4
-                         (minimax board player-two-mark player-one-mark))))
+                         (choose-best-space board player-two-mark))))
 
           (it "gets winning tile position - 4"
 
@@ -55,7 +55,7 @@
                            "4" player-one-mark "6"
                            player-two-mark "8" player-two-mark]]
                 (should= 7
-                         (minimax board player-two-mark player-one-mark))))
+                         (choose-best-space board player-two-mark))))
 
           (it "gets winning tile position - 5"
 
@@ -68,7 +68,7 @@
                            player-two-mark "5" "6"
                            player-two-mark player-one-mark player-one-mark]]
                 (should= 4
-                         (minimax board player-two-mark player-one-mark))))
+                         (choose-best-space board player-two-mark))))
 
           (it "gets winning tile position - 6 - testing depth so that it loses in as many turns as possible"
 
@@ -81,7 +81,7 @@
                            "4" "5" player-one-mark
                            player-two-mark player-two-mark player-one-mark]]
                 (should= 2
-                         (minimax board player-two-mark player-one-mark))))
+                         (choose-best-space board player-two-mark))))
 
           (it "gets winning tile position - 7 - player one is minimaxer"
 
@@ -94,4 +94,4 @@
                            "4" player-one-mark "6"
                            "7" "8" "9"]]
                 (should= 6
-                         (minimax board player-one-mark player-two-mark)))))
+                         (choose-best-space board player-one-mark)))))

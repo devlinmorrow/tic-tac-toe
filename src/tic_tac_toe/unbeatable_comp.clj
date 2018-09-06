@@ -1,58 +1,60 @@
 (ns tic-tac-toe.unbeatable-comp
-  (:require [tic-tac-toe.board :refer :all]))
+  (:require [tic-tac-toe.board :refer :all]
+            [tic-tac-toe.marks :refer :all]))
 
-(declare score-moves)
+(def loss -1)
+(def tie 0)
+(def win 1)
 
-(def max-value-score 10)
-(def tie-score 0)
+(defn get-opp-marker
+  [marker]
+  (if (= player-one-mark marker) 
+    player-two-mark 
+    player-one-mark))
 
-(defn maximising-level?
-  [depth]
-  (boolean (= (mod depth 2) 0)))
+(defn evaluate-result
+  [board marker score]
+  (let [winner (winner? board)]
+    (cond
+          (= winner marker) score
+          (nil? winner) tie
+          :else (* loss score))))
 
-(defn get-min
-  [moves]
-  (val (apply min-key val moves)))
+(declare choose-best-space)
 
-(defn get-max
-  [moves]
-  (val (apply max-key val moves)))
+(defn simulate-next-move
+  [board marker score]
+  (let [opp-marker (get-opp-marker marker)]
+    (place-mark board
+                (choose-best-space board opp-marker)
+                opp-marker)))
 
-(defn get-minimax-score
-  [depth moves]
-  (if (maximising-level? depth)
-    (get-max moves)
-    (get-min moves)))
+(defn score-move
+  [board marker score]
+  (if (terminal-state? board)
+    (evaluate-result board marker score)
+    (recur (simulate-next-move board marker score)
+           (get-opp-marker marker)
+           (* loss score))))
 
-(defn get-score-for-winner
-  [board minimaxer depth]
-    (if (= (winner? board) minimaxer)
-      (- max-value-score depth)
-      (- (- max-value-score depth))))
+(defn score-moves
+  [board empty-indices marker]
+  (map #(score-move (place-mark board % marker)
+                    marker
+                    win)
+       empty-indices))
 
-(defn get-score
-  [board minimaxer opponent depth]
-  (cond 
-    (winner? board) (get-score-for-winner board minimaxer depth)
-    (is-full? board) tie-score
-    :else (get-minimax-score depth (score-moves board opponent minimaxer depth))))
+(defn create-idx-scores-map
+  [board empty-indices marker]
+  (zipmap empty-indices
+          (score-moves board empty-indices marker)))
 
-(defn get-mark-at-depth
-  [depth minimaxer opponent]
-  (if (maximising-level? depth)
-    minimaxer
-    opponent))
+(defn pick-max-score-idx
+  [idx-scores-map]
+  (key (first (sort-by val > idx-scores-map))))
 
-(defn score-moves 
-  [board minimaxer opponent depth]
-  (let [empty-tiles (get-indices-empty-tiles board)
-        scores (map (fn [empty-tile] get-score (place-mark board empty-tile (get-mark-at-depth depth minimaxer opponent)) minimaxer opponent (inc depth)) empty-tiles)]
-    (zipmap empty-tiles scores)))
-
-(defn get-best-move
-  [moves]
-  (key (apply max-key val moves)))
-
-(defn minimax
-  [board minimaxer opponent]
-  (get-best-move (score-moves board minimaxer opponent 0)))
+(defn choose-best-space
+  [board marker]
+  (pick-max-score-idx (create-idx-scores-map board
+                                             (get-indices-empty-tiles board)
+                                             marker)))
