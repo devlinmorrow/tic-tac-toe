@@ -5,20 +5,20 @@
             [tic-tac-toe.unbeatable-comp :refer :all]))
 
 (describe "get-tile-unbeatable-comp"
-          (it "gets winning tile position - 1"
+          (it "gets best tile position - 1"
 
-              ; O X X
+              ; O X O
               ; O O X
               ; X 8 9 
               ; optimum move: 9 (position 8)
 
-              (let [board [player-two-mark player-one-mark player-one-mark 
+              (let [board [player-two-mark player-one-mark player-two-mark
                            player-two-mark player-two-mark player-one-mark
                            player-one-mark "8" "9"]]
                 (should= 8
-                         (choose-best-space board player-two-mark))))
+                         (choose-best-space board player-two-mark 0))))
 
-          (it "gets winning tile position - 2"
+          (it "gets best tile position - 2"
 
               ; O X O
               ; 4 5 X
@@ -29,9 +29,9 @@
                            "4" "5" player-one-mark
                            player-one-mark player-two-mark player-two-mark]]
                 (should= 4
-                         (choose-best-space board player-two-mark))))
+                         (choose-best-space board player-two-mark 0))))
 
-          (it "gets winning tile position - 3"
+          (it "gets best tile position - 3"
 
               ; O 2 X
               ; X 5 6
@@ -42,9 +42,9 @@
                            player-one-mark "5" "6"
                            player-one-mark player-two-mark player-two-mark]]
                 (should= 4
-                         (choose-best-space board player-two-mark))))
+                         (choose-best-space board player-two-mark 0))))
 
-          (it "gets winning tile position - 4"
+          (it "gets best tile position - 4"
 
               ; X X 3
               ; 4 X 6
@@ -55,9 +55,9 @@
                            "4" player-one-mark "6"
                            player-two-mark "8" player-two-mark]]
                 (should= 7
-                         (choose-best-space board player-two-mark))))
+                         (choose-best-space board player-two-mark 0))))
 
-          (it "gets winning tile position - 5"
+          (it "gets best tile position - 5"
 
               ; X 2 O
               ; O 5 6
@@ -68,9 +68,9 @@
                            player-two-mark "5" "6"
                            player-two-mark player-one-mark player-one-mark]]
                 (should= 4
-                         (choose-best-space board player-two-mark))))
+                         (choose-best-space board player-two-mark 0))))
 
-          (it "gets winning tile position - 6 - testing depth so that it loses in as many turns as possible"
+          (it "gets best tile position - 6 - testing depth so that it loses in as many turns as possible"
 
               ; 1 X 3
               ; 4 5 X
@@ -81,9 +81,9 @@
                            "4" "5" player-one-mark
                            player-two-mark player-two-mark player-one-mark]]
                 (should= 2
-                         (choose-best-space board player-two-mark))))
+                         (choose-best-space board player-two-mark 0))))
 
-          (it "gets winning tile position - 7 - player one is minimaxer"
+          (it "gets best tile position - 7 - player one is minimaxer"
 
               ; O O X
               ; 4 X 6
@@ -94,4 +94,4 @@
                            "4" player-one-mark "6"
                            "7" "8" "9"]]
                 (should= 6
-                         (choose-best-space board player-one-mark)))))
+                         (choose-best-space board player-one-mark 0)))))

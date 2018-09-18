@@ -2,59 +2,64 @@
   (:require [tic-tac-toe.board :refer :all]
             [tic-tac-toe.marks :refer :all]))
 
-(def loss -1)
 (def tie 0)
-(def win 1)
+(def max-value 10)
 
-(defn get-opp-marker
+(defn- get-opp-marker
   [marker]
   (if (= player-one-mark marker) 
     player-two-mark 
     player-one-mark))
 
-(defn evaluate-result
-  [board marker score]
+(defn- evaluate-result
+  [board marker perspective depth]
   (let [winner (winner? board)]
     (cond
-          (= winner marker) score
-          (nil? winner) tie
-          :else (* loss score))))
+      (= winner marker) (* (- max-value depth) perspective)
+      (nil? winner) tie
+      :else (* (- depth max-value) perspective))))
 
 (declare choose-best-space)
 
-(defn simulate-next-move
-  [board marker score]
+(defn- simulate-next-move
+  [board marker perspective depth]
   (let [opp-marker (get-opp-marker marker)]
     (place-mark board
-                (choose-best-space board opp-marker)
+                (choose-best-space board opp-marker depth)
                 opp-marker)))
 
-(defn score-move
-  [board marker score]
+(defn- score-move
+  [board marker perspective depth]
   (if (terminal-state? board)
-    (evaluate-result board marker score)
-    (recur (simulate-next-move board marker score)
+    (evaluate-result board marker perspective depth)
+    (recur (simulate-next-move board marker perspective (inc depth))
            (get-opp-marker marker)
-           (* loss score))))
+           (* -1 perspective)
+           (inc depth))))
 
-(defn score-moves
-  [board empty-indices marker]
+(defn- score-moves
+  [board empty-indices marker depth]
   (map #(score-move (place-mark board % marker)
                     marker
-                    win)
+                    1
+                    depth)
        empty-indices))
 
-(defn create-idx-scores-map
-  [board empty-indices marker]
+(defn- make-indices-scores-map
+  [board empty-indices marker depth]
   (zipmap empty-indices
-          (score-moves board empty-indices marker)))
+          (score-moves board 
+                       empty-indices 
+                       marker 
+                       depth)))
 
-(defn pick-max-score-idx
+(defn- get-index-max-score
   [idx-scores-map]
   (key (first (sort-by val > idx-scores-map))))
 
 (defn choose-best-space
-  [board marker]
-  (pick-max-score-idx (create-idx-scores-map board
-                                             (get-indices-empty-tiles board)
-                                             marker)))
+  [board marker depth]
+  (get-index-max-score (make-indices-scores-map board
+                                                (get-indices-empty-tiles board)
+                                                marker
+                                                depth)))
