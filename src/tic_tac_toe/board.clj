@@ -26,7 +26,7 @@
   [board]
   (every? (fn [mark] (eq-mark-one-or-two mark)) board))
 
-(defn line-winning?
+(defn- line-winning?
   [board pos-1 pos-2 pos-3]
   (let [line [(get board pos-1) (get board pos-2) (get board pos-3)]]
     (cond

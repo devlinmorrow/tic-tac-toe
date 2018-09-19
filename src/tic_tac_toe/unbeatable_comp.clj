@@ -1,9 +1,12 @@
 (ns tic-tac-toe.unbeatable-comp
-  (:require [tic-tac-toe.board :refer :all]
+  (:require [tic-tac-toe.board :refer [get-indices-empty-tiles
+                                       place-mark
+                                       terminal-state?
+                                       winner?]]
             [tic-tac-toe.marks :refer :all]))
 
 (def tie 0)
-(def max-value 10)
+(def maximum-depth 10)
 
 (defn- get-opp-marker
   [marker]
@@ -15,9 +18,9 @@
   [board marker perspective depth]
   (let [winner (winner? board)]
     (cond
-      (= winner marker) (* (- max-value depth) perspective)
+      (= winner marker) (* (- maximum-depth depth) perspective)
       (nil? winner) tie
-      :else (* (- depth max-value) perspective))))
+      :else (* (- depth maximum-depth) perspective))))
 
 (declare choose-best-space)
 

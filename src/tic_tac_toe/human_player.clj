@@ -7,7 +7,7 @@
                                     send-message]]))
 
 (defn- get-human-choice []
-   (- (get-user-tile-choice) 1))
+  (- (get-user-tile-choice) 1))
 
 (defn get-tile-from-human
   [board]
@@ -19,6 +19,6 @@
         (recur (get-human-choice)))
       (not-in-range? board tile-choice)
       (do
-          (send-message choice-out-of-range-message)
-          (recur (get-human-choice)))
+        (send-message choice-out-of-range-message)
+        (recur (get-human-choice)))
       :else tile-choice)))

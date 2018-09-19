@@ -13,7 +13,7 @@
             [tic-tac-toe.ui :refer [format-board-cli
                                     send-message]]))
 
-(defn start-message
+(defn- start-message
   []
   (send-message welcome-message)
   (send-message (format-board-cli (make-initial-board))))
@@ -24,25 +24,25 @@
     player-two
     player-one))
 
-(defn get-tile-number
+(defn- get-tile-number
   [player board]
   (if (= :human (:type player))
     (get-tile-from-human board)
     (choose-best-space board (:mark player) 0)))
 
-(defn make-move
+(defn- make-move
   [current-board current-player]
   (place-mark current-board 
               (get-tile-number current-player current-board) 
               (current-player :mark)))
 
-(defn present-move 
+(defn- present-move 
   [board]
   (newline)
   (send-message picked-tile-message)
   (send-message (format-board-cli board)))
 
-(defn play-all-turns
+(defn- play-all-turns
   [player-one player-two]
   (loop [current-board (make-initial-board) 
          current-player player-one]
