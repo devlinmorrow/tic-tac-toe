@@ -15,6 +15,11 @@
   (send-message ask-for-choice)
   (read-line))
 
+(defn get-string-from-user []
+  (read-line))
+
+(defn get-number-from-user []
+  (read-string (read-line)))
 
 (defn get-user-tile-choice []
   (loop [tile-choice (get-user-choice)]
@@ -22,5 +27,3 @@
       (read-string tile-choice)
       (do (send-message not-integer-message)
           (recur (get-user-choice))))))
-
-
