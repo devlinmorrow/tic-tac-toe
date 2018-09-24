@@ -6,11 +6,10 @@
   [board-values]
   (let [board-size (int (Math/sqrt (count board-values)))]
     (->> board-values
-         (into [])
          (map (fn [x] (str x " ")))
          (partition board-size)
-         (interpose ["\n"])
-         (apply concat) 
+         (interpose "\n")
+         (apply concat)
          clojure.string/join)))
 
 (defn send-message
