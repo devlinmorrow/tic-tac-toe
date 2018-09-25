@@ -16,11 +16,13 @@
                 (should= (str message "\n")
                          (with-out-str (send-message message))))))
 
-(describe "get-user-tile-choice"
-          (it "gets tile choice from UI and converts to number on second attempt, after first
-              attempt is not an integer"
-              (let [non-int-choice "3asv"
-                    tile-choice "3"]
+(describe "attempt-get-number"
+          (it "returns number if number"
+              (let [tile-choice "3"]
                 (should= 3 
-                         (with-in-str (str non-int-choice "\n" tile-choice) (get-user-tile-choice))))))
+                         (with-in-str tile-choice (attempt-get-number)))))
                         
+          (it "returns nil if not number"
+              (let [non-int-choice "3asv"]
+                (should= nil 
+                         (with-in-str non-int-choice (attempt-get-number))))))

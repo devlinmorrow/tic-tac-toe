@@ -5,7 +5,7 @@
 (def ask-for-mode "Please enter 1 for human-vs-human, 2 for human-vs-comp or 
                   3 for comp-vs-comp.")
 
-(def ask-for-choice "Please pick a tile number.")
+(def ask-for-tile-choice "Please pick a tile number.")
 
 (def already-picked-message "Uhoh, that one's taken!")
 

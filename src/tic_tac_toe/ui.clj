@@ -1,6 +1,13 @@
 (ns tic-tac-toe.ui
-  (:require [tic-tac-toe.messages :refer [ask-for-choice
+  (:require [tic-tac-toe.messages :refer [ask-for-tile-choice
                                           not-integer-message]]))
+
+(defn clear-screen []
+  (print (str (char 27) "[2J")))
+
+(defn delay-in-secs 
+  [secs]
+  (Thread/sleep (* secs 1000)))
 
 (defn format-board-cli
   [board-values]
@@ -16,20 +23,11 @@
   [message]
   (println message))
 
-(defn get-user-choice []
-  (newline)
-  (send-message ask-for-choice)
-  (read-line))
-
 (defn get-string-from-user []
   (read-line))
 
-(defn get-number-from-user []
-  (read-string (read-line)))
-
-(defn get-user-tile-choice []
-  (loop [tile-choice (get-user-choice)]
-    (if (re-matches #"\d+" tile-choice)
-      (read-string tile-choice)
-      (do (send-message not-integer-message)
-          (recur (get-user-choice))))))
+(defn attempt-get-number
+  []
+  (let [number-choice (read-line)]
+    (if (re-matches #"\d+" number-choice)
+      (read-string number-choice))))
