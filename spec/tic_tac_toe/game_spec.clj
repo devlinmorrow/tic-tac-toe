@@ -6,8 +6,7 @@
             [tic-tac-toe.messages :refer [draw-message
                                           winner-message]]))
 
-(def player-one {:type :human :mark "X"})
-(def player-two {:type :human :mark "O"})
+(def players [{:type :human :mark "X"} {:type :human :mark "O"}])
 
 (describe "run-game"
           (it "does not throw error when game won"
@@ -17,7 +16,7 @@
                     winning-choice "3"
                     delay-time 0]
                 (should= nil
-                         (with-in-str winning-choice (run-game player-one player-two won-board delay-time)))))
+                         (with-in-str winning-choice (run-game players won-board delay-time)))))
 
           (it "does not throw error when game drawn"
               (let [drawn-board [player-one-mark player-two-mark "3"
@@ -26,4 +25,4 @@
                     drawing-choice "3"
                     delay-time 0]
                 (should= nil
-                         (with-in-str drawing-choice (run-game player-one player-two drawn-board delay-time))))))
+                         (with-in-str drawing-choice (run-game players drawn-board delay-time))))))

@@ -26,13 +26,13 @@
   [depth]
   (> -1 (- maximum-depth depth)))
 
-(declare choose-best-space)
+(declare get-tile-from-comp)
 
 (defn- simulate-next-move
   [board marker perspective depth]
   (let [opp-marker (get-opp-marker marker)]
     (place-mark board
-                (choose-best-space board opp-marker depth)
+                (get-tile-from-comp board opp-marker depth)
                 opp-marker)))
 
 (defn- score-move
@@ -64,7 +64,7 @@
   [idx-scores-map]
   (key (first (sort-by val > idx-scores-map))))
 
-(defn choose-best-space
+(defn get-tile-from-comp
   [board marker depth]
   (get-index-max-score (make-indices-scores-map board
                                                 (get-indices-empty-tiles board)

@@ -3,7 +3,7 @@
                                        place-mark
                                        winner?
                                        is-full?]]
-            [tic-tac-toe.unbeatable-comp :refer [choose-best-space]]
+            [tic-tac-toe.unbeatable-comp :refer [get-tile-from-comp]]
             [tic-tac-toe.human-player :refer [get-tile-from-user]]
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.messages :refer [welcome-message
@@ -11,14 +11,15 @@
                                           winner-message
                                           draw-message]]
             [tic-tac-toe.cli-ui :refer [clear-screen
-                                    delay-in-secs
-                                    format-board-cli
-                                    send-message]]))
+                                        delay-in-secs
+                                        draw-display
+                                        format-board-cli
+                                        present-move
+                                        send-message
+                                        starting-display
+                                        win-display]]))
 
-(defn- starting-prompt
-  [board]
-  (send-message welcome-message)
-  (send-message (format-board-cli board)))
+(def starting-depth 0)
 
 (defn- switch-player
   [current-player player-one player-two]
@@ -27,47 +28,30 @@
     player-one))
 
 (defn- get-tile-number
-  [player board]
+  [player board delay-time]
   (if (= :human (:type player))
-    (get-tile-from-user board 1)
-    (choose-best-space board (:mark player) 0)))
+    (get-tile-from-user board delay-time)
+    (get-tile-from-comp board (:mark player) starting-depth)))
 
 (defn- make-move
-  [current-board current-player]
+  [current-board current-player delay-time]
   (place-mark current-board 
-              (get-tile-number current-player current-board) 
+              (get-tile-number current-player current-board delay-time) 
               (current-player :mark)))
-
-(defn- present-move 
-  [board delay-time]
-      (clear-screen)
-  (newline)
-  (send-message picked-tile-message)
-  (newline)
-  (send-message (format-board-cli board))
-  (delay-in-secs delay-time))
 
 (defn- play-all-turns
   [player-one player-two board delay-time]
   (loop [current-player player-one
          current-board board]
-    (let [current-board (make-move current-board current-player)]
+    (let [current-board (make-move current-board current-player delay-time)]
       (present-move current-board delay-time)
       (cond
-        (winner? current-board) 
-        (do
-          (newline)
-          (send-message (winner-message (:mark current-player)))
-          (newline))
-        (is-full? current-board)         
-        (do
-          (newline)
-          (send-message draw-message)
-          (newline))
+        (winner? current-board) (win-display current-player)
+        (is-full? current-board) (draw-display)
         :else (recur (switch-player current-player player-one player-two)
                      current-board)))))
 
 (defn run-game
-  [player-one player-two board delay-time]
-  (starting-prompt board)
-  (play-all-turns player-one player-two board delay-time))
+  [players board delay-time]
+  (starting-display board)
+  (play-all-turns (first players) (second players) board delay-time))

@@ -10,10 +10,10 @@
 
 (defn -main 
   []
-  (let [delay-time 0]
+  (let [delay-time 1]
     (loop [players (get-mode)]
       (clear-screen)
-      (run-game (get players 0) (get players 1) (make-initial-board) delay-time)
+      (run-game players (make-initial-board) delay-time)
       (let [replay-answer (replay? delay-time)]
         (clear-screen)
         (if (= replay-answer "y")

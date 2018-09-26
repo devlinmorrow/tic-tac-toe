@@ -6,11 +6,11 @@
                                           choice-out-of-range-message
                                           not-integer-message]]
             [tic-tac-toe.cli-ui :refer [attempt-get-number
-                                    clear-screen
-                                    delay-in-secs
-                                    format-board-cli
-                                    get-string-from-user
-                                    send-message]]))
+                                        clear-screen
+                                        delay-in-secs
+                                        format-board-cli
+                                        get-string-from-user
+                                        send-message]]))
 
 
 (defn- invalid-data-mechs 
