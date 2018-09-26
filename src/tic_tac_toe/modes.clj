@@ -2,7 +2,7 @@
   (:require [tic-tac-toe.messages :refer [ask-for-mode
                                           ask-replay
                                           not-y-or-n]]
-            [tic-tac-toe.ui :refer [attempt-get-number
+            [tic-tac-toe.cli-ui :refer [attempt-get-number
                                     clear-screen
                                     delay-in-secs
                                     get-string-from-user

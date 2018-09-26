@@ -10,7 +10,7 @@
                                           picked-tile-message
                                           winner-message
                                           draw-message]]
-            [tic-tac-toe.ui :refer [clear-screen
+            [tic-tac-toe.cli-ui :refer [clear-screen
                                     delay-in-secs
                                     format-board-cli
                                     send-message]]))

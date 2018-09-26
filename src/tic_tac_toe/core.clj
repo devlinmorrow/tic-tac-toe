@@ -4,7 +4,7 @@
             [tic-tac-toe.modes :refer [get-mode
                                        replay?]]
             [tic-tac-toe.messages :refer [goodbye]]
-            [tic-tac-toe.ui :refer [clear-screen
+            [tic-tac-toe.cli-ui :refer [clear-screen
                                     delay-in-secs
                                     send-message]]))
 

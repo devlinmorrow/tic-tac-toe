@@ -1,7 +1,7 @@
-(ns tic-tac-toe.ui-spec
+(ns tic-tac-toe.cli-ui-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.board-spec :refer [empty-board]]
-            [tic-tac-toe.ui :refer :all]))
+            [tic-tac-toe.cli-ui :refer :all]))
 
 (describe "format-board-cli"
           (it "formats the board for CLI"

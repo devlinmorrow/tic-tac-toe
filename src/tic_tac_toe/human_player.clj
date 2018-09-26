@@ -5,7 +5,7 @@
                                           ask-for-tile-choice
                                           choice-out-of-range-message
                                           not-integer-message]]
-            [tic-tac-toe.ui :refer [attempt-get-number
+            [tic-tac-toe.cli-ui :refer [attempt-get-number
                                     clear-screen
                                     delay-in-secs
                                     format-board-cli

@@ -1,4 +1,4 @@
-(ns tic-tac-toe.ui
+(ns tic-tac-toe.cli-ui
   (:require [tic-tac-toe.messages :refer [ask-for-tile-choice
                                           not-integer-message]]))
 
