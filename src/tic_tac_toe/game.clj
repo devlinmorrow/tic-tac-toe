@@ -15,12 +15,12 @@
                                     format-board-cli
                                     send-message]]))
 
-(defn- start-message
-  []
+(defn- starting-prompt
+  [board]
   (send-message welcome-message)
-  (send-message (format-board-cli (make-initial-board))))
+  (send-message (format-board-cli board)))
 
-(defn switch-player
+(defn- switch-player
   [current-player player-one player-two]
   (if (= player-one current-player) 
     player-two
@@ -38,8 +38,9 @@
               (get-tile-number current-player current-board) 
               (current-player :mark)))
 
-(defn- present-board 
+(defn- present-move 
   [board delay-time]
+      (clear-screen)
   (newline)
   (send-message picked-tile-message)
   (newline)
@@ -47,13 +48,11 @@
   (delay-in-secs delay-time))
 
 (defn- play-all-turns
-  [player-one player-two delay-time]
-  (loop [current-board (make-initial-board) 
-         current-player player-one]
-    (let [current-board (make-move current-board 
-                                   current-player)]
-      (clear-screen)
-      (present-board current-board delay-time)
+  [player-one player-two board delay-time]
+  (loop [current-player player-one
+         current-board board]
+    (let [current-board (make-move current-board current-player)]
+      (present-move current-board delay-time)
       (cond
         (winner? current-board) 
         (do
@@ -65,9 +64,10 @@
           (newline)
           (send-message draw-message)
           (newline))
-        :else (recur current-board (switch-player current-player player-one player-two))))))
+        :else (recur (switch-player current-player player-one player-two)
+                     current-board)))))
 
-(defn run
-  [player-one player-two delay-time]
-  (start-message)
-  (play-all-turns player-one player-two delay-time))
+(defn run-game
+  [player-one player-two board delay-time]
+  (starting-prompt board)
+  (play-all-turns player-one player-two board delay-time))

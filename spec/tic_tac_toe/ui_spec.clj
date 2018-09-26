@@ -6,7 +6,6 @@
 (describe "format-board-cli"
           (it "formats the board for CLI"
               (let [cli-formatted-board "1 2 3 \n4 5 6 \n7 8 9 "]
-                (print cli-formatted-board)
                 (should= cli-formatted-board
                          (format-board-cli empty-board)))))
 

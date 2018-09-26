@@ -1,8 +1,6 @@
 (ns tic-tac-toe.modes
-  (:require [tic-tac-toe.game :refer [run]]
-            [tic-tac-toe.messages :refer [ask-for-mode
+  (:require [tic-tac-toe.messages :refer [ask-for-mode
                                           ask-replay
-                                          goodbye
                                           not-y-or-n]]
             [tic-tac-toe.ui :refer [attempt-get-number
                                     clear-screen
