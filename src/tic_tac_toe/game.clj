@@ -37,7 +37,7 @@
   [current-board current-player delay-time]
   (place-mark current-board 
               (get-tile-number current-player current-board delay-time) 
-              (current-player :mark)))
+              (:mark current-player)))
 
 (defn- play-all-turns
   [player-one player-two board delay-time]
@@ -53,5 +53,5 @@
 
 (defn run-game
   [players board delay-time]
-  (starting-display board)
+  (starting-display)
   (play-all-turns (first players) (second players) board delay-time))

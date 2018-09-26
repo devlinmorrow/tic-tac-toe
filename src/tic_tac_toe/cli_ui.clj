@@ -1,8 +1,12 @@
 (ns tic-tac-toe.cli-ui
   (:require [tic-tac-toe.messages :refer [ask-for-tile-choice
+                                          ask-replay
                                           draw-message
+                                          goodbye
+                                          invalid-mode
                                           picked-tile-message
                                           not-integer-message
+                                          not-y-or-n
                                           welcome-message
                                           winner-message]]))
 
@@ -56,7 +60,59 @@
   (send-message (format-board-cli board))
   (delay-in-secs delay-time))
 
-(defn starting-display
-  [board]
-  (send-message welcome-message)
-  (send-message (format-board-cli board)))
+(defn starting-display []
+  (clear-screen)
+  (send-message welcome-message))
+
+(defn invalid-data-prompt 
+  [invalid-data-reason delay-time]
+  (send-message invalid-data-reason)
+  (delay-in-secs delay-time)
+  (clear-screen))
+
+(defn get-valid-number-without-board 
+  [request-message delay-time]
+  (loop []
+    (clear-screen)
+    (newline)
+    (send-message request-message)
+    (let [picked-number (attempt-get-number)]
+      (if (nil? picked-number)
+        (do
+          (invalid-data-prompt not-integer-message delay-time)
+          (recur))
+        picked-number))))
+
+(defn get-valid-number-with-board 
+  [request-message board delay-time]
+  (loop []
+    (clear-screen)
+    (newline)
+    (send-message (format-board-cli board))
+    (newline)
+    (send-message request-message)
+    (let [picked-number (attempt-get-number)]
+      (if (nil? picked-number)
+        (do
+          (invalid-data-prompt not-integer-message delay-time)
+          (recur))
+        picked-number))))
+
+(defn get-replay-answer []
+  (send-message ask-replay)
+  (newline)
+  (get-string-from-user))
+
+(defn replay? 
+  [delay-time]
+  (loop [answer (get-replay-answer)]
+    (if (or (= answer "y") (= answer "n")) 
+      answer
+      (do 
+        (invalid-data-prompt not-y-or-n delay-time)
+        (recur (get-replay-answer))))))
+
+(defn goodbye-display 
+  [delay-time]
+  (send-message goodbye)
+  (delay-in-secs delay-time))

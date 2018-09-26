@@ -10,37 +10,27 @@
                                         delay-in-secs
                                         format-board-cli
                                         get-string-from-user
+                                        get-valid-number-with-board
+                                        invalid-data-prompt
                                         send-message]]))
 
-
-(defn- invalid-data-mechs 
-  [invalid-data-reason delay-time board]
-  (send-message invalid-data-reason)
-  (delay-in-secs delay-time)
-  (clear-screen)
-  (send-message (format-board-cli board)))
-
-(defn- get-user-choice 
+(defn- get-tile-choice 
   [board delay-time]
-  (newline)
-  (send-message ask-for-tile-choice)
-  (let [picked-tile (attempt-get-number)]
-    (if (nil? picked-tile)
-      (do
-        (invalid-data-mechs not-integer-message delay-time board)
-        (get-user-choice board delay-time))
-      (- picked-tile 1))))
+  (let [picked-tile (get-valid-number-with-board ask-for-tile-choice 
+                                                 board
+                                                 delay-time)]
+    (- picked-tile 1)))
 
 (defn get-tile-from-user
   [board delay-time]
-  (loop [tile-choice (get-user-choice board delay-time)]
+  (loop [tile-choice (get-tile-choice board delay-time)]
     (cond
       (tile-marked? board tile-choice)
       (do
-        (invalid-data-mechs already-picked-message delay-time board)
-        (recur (get-user-choice board delay-time)))
+        (invalid-data-prompt already-picked-message delay-time)
+        (recur (get-tile-choice board delay-time)))
       (not-in-range? board tile-choice)
       (do
-        (invalid-data-mechs choice-out-of-range-message delay-time board)
-        (recur (get-user-choice board delay-time)))
+        (invalid-data-prompt choice-out-of-range-message delay-time)
+        (recur (get-tile-choice board delay-time)))
       :else tile-choice)))
