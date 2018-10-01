@@ -2,7 +2,7 @@
 
 Command-Line Tic Tac Toe game written in Clojure.
 
-###Installation Instructions
+### Installation Instructions
 
 1. Prerequisites: [Clojure](https://clojure.org/community/downloads), 
 [JDK 8](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html)
@@ -12,14 +12,7 @@ Command-Line Tic Tac Toe game written in Clojure.
 
 3. `lein run` to run the program and `lein spec` to run the tests.
 
-### Issues
-
-1. The board is currently hardcoded as 3x3 and should be abstracted so that any 
-board dimensions work.
-
 ### Wishlist
 
-1. Abstracting the board methods and adding the ability to indicate to the program
-what board size is desired.
-
-2. Unbeatable computer player mode.
+1. The board is currently hardcoded to be 3x3. The user should be able to select the 
+desired size of the board (for example 4x4).
