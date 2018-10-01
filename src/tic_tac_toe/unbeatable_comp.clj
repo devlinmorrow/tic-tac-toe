@@ -1,5 +1,5 @@
 (ns tic-tac-toe.unbeatable-comp
-  (:require [tic-tac-toe.board :refer [get-indices-empty-tiles
+  (:require [tic-tac-toe.board :refer [get-possible-moves
                                        place-mark
                                        terminal-state?
                                        winner?]]
@@ -14,7 +14,7 @@
     player-two-mark 
     player-one-mark))
 
-(defn- evaluate-result
+(defn- score-terminal-board
   [board marker perspective depth]
   (let [winner (winner? board)]
     (cond
@@ -28,7 +28,7 @@
 
 (declare get-tile-from-computer)
 
-(defn- simulate-next-move
+(defn- get-best-next-board-for-marker
   [board marker perspective depth]
   (let [opp-marker (get-opp-marker marker)]
     (place-mark board
@@ -38,27 +38,27 @@
 (defn- score-move
   [board marker perspective depth move]
   (if (or (terminal-state? board) (at-max-depth? depth))
-    [(evaluate-result board marker perspective depth) move]
-    (recur (simulate-next-move board marker perspective (inc depth))
+    (score-terminal-board board marker perspective depth)
+    (recur (get-best-next-board-for-marker board marker perspective (inc depth))
            (get-opp-marker marker)
            (* -1 perspective)
            (inc depth)
            move)))
 
 (defn- score-moves
-  [board empty-indices marker depth]
+  [board possible-moves marker depth]
   (map #(score-move (place-mark board % marker)
                     marker
                     1
                     depth
                     %)
-       empty-indices))
+       possible-moves))
 
-(defn- make-indices-scores-map
-  [board empty-indices marker depth]
-  (zipmap empty-indices
+(defn- get-moves-to-scores
+  [board possible-moves marker depth]
+  (zipmap possible-moves
           (score-moves board 
-                       empty-indices 
+                       possible-moves 
                        marker 
                        depth)))
 
@@ -72,3 +72,10 @@
                                     (get-indices-empty-tiles board)
                                     marker
                                     depth)))
+
+(defn get-tile-from-computer
+  [board marker depth]
+  (get-max-move (get-moves-to-scores board
+                                     (get-possible-moves board)
+                                     marker
+                                     depth)))

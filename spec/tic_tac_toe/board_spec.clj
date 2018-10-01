@@ -92,14 +92,14 @@
           (it "is false when not in terminal state"
               (should-not (terminal-state? empty-board))))
 
-(describe "get-indices-empty-tiles"
+(describe "get-possible-moves"
           (it "returns indices of all empty tiles"
               (let [all-empty (into [] (range 9))]
                     (should= all-empty
-                             (get-indices-empty-tiles empty-board))))
+                             (get-possible-moves empty-board))))
 
           (it "returns indices of only empty tiles"
               (let [ex-board [player-one-mark "2" "3" player-two-mark "5" "6" "7" "8" "9"]
                     ex-indices [1 2 4 5 6 7 8]]
                 (should= ex-indices
-                         (get-indices-empty-tiles ex-board)))))
+                         (get-possible-moves ex-board)))))

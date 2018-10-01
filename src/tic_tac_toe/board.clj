@@ -94,6 +94,6 @@
   [board]
   (or (winner? board) (is-full? board)))
   
-(defn get-indices-empty-tiles
+(defn get-possible-moves
   [board]
   (into [] (keep identity (flatten (map-indexed (fn [idx mark] [(if-not (eq-mark-one-or-two mark) idx)]) board)))))
