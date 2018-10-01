@@ -3,7 +3,7 @@
                                        place-mark
                                        winner?
                                        is-full?]]
-            [tic-tac-toe.unbeatable-comp :refer [get-tile-from-comp]]
+            [tic-tac-toe.unbeatable-comp :refer [get-tile-from-computer]]
             [tic-tac-toe.human-player :refer [get-tile-from-user]]
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.messages :refer [welcome-message
@@ -30,7 +30,7 @@
   [player board delay-time]
   (if (= :human (:type player))
     (get-tile-from-user board delay-time)
-    (get-tile-from-comp board (:mark player) starting-depth)))
+    (get-tile-from-computer board (:mark player) starting-depth)))
 
 (defn- make-move
   [current-board current-player delay-time]

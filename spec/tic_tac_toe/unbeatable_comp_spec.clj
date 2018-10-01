@@ -5,7 +5,7 @@
             [tic-tac-toe.marks :refer :all]
             [tic-tac-toe.unbeatable-comp :refer :all]))
 
-(describe "get-tile-unbeatable-comp"
+(describe "get-tile-unbeatable-computer"
           (it "gets best tile position - 1"
 
               ; O X O
@@ -17,7 +17,7 @@
                            player-two-mark player-two-mark player-one-mark
                            player-one-mark "8" "9"]]
                 (should= 8
-                         (get-tile-from-comp board player-two-mark starting-depth))))
+                         (get-tile-from-computer board player-two-mark starting-depth))))
 
           (it "gets best tile position - 2"
 
@@ -30,7 +30,7 @@
                            "4" "5" player-one-mark
                            player-one-mark player-two-mark player-two-mark]]
                 (should= 4
-                         (get-tile-from-comp board player-two-mark starting-depth))))
+                         (get-tile-from-computer board player-two-mark starting-depth))))
 
           (it "gets best tile position - 3"
 
@@ -43,7 +43,7 @@
                            player-one-mark "5" "6"
                            player-one-mark player-two-mark player-two-mark]]
                 (should= 4
-                         (get-tile-from-comp board player-two-mark starting-depth))))
+                         (get-tile-from-computer board player-two-mark starting-depth))))
 
           (it "gets best tile position - 4"
 
@@ -56,7 +56,7 @@
                            "4" player-one-mark "6"
                            player-two-mark "8" player-two-mark]]
                 (should= 7
-                         (get-tile-from-comp board player-two-mark starting-depth))))
+                         (get-tile-from-computer board player-two-mark starting-depth))))
 
           (it "gets best tile position - 5"
 
@@ -69,7 +69,7 @@
                            player-two-mark "5" "6"
                            player-two-mark player-one-mark player-one-mark]]
                 (should= 4
-                         (get-tile-from-comp board player-two-mark starting-depth))))
+                         (get-tile-from-computer board player-two-mark starting-depth))))
 
           (it "gets best tile position - 6 - testing depth so that it loses in as many turns as possible"
 
@@ -82,7 +82,7 @@
                            "4" "5" player-one-mark
                            player-two-mark player-two-mark player-one-mark]]
                 (should= 2
-                         (get-tile-from-comp board player-two-mark starting-depth))))
+                         (get-tile-from-computer board player-two-mark starting-depth))))
 
           (it "gets best tile position - 7 - player one is minimaxer"
 
@@ -95,4 +95,4 @@
                            "4" player-one-mark "6"
                            "7" "8" "9"]]
                 (should= 6
-                         (get-tile-from-comp board player-one-mark starting-depth)))))
+                         (get-tile-from-computer board player-one-mark starting-depth)))))

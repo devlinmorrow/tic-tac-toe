@@ -7,26 +7,17 @@
 
 (describe "format-board-cli"
           (it "formats the board for CLI"
-              (let [cli-formatted-board "1 2 3 \n4 5 6 \n7 8 9 "]
-                (should= cli-formatted-board
-                         (format-board-cli empty-board)))))
-
-(describe "display-message"
-          (it "sends message to output"
-              (let [message "Hello, world!"]
-                (should= (str message "\n")
-                         (with-out-str (display-message message))))))
+                (should= "1 2 3 \n4 5 6 \n7 8 9 "
+                         (format-board-cli empty-board))))
 
 (describe "attempt-get-number"
-          (it "returns number if number"
-              (let [tile-choice "3"]
+          (it "converts string of number to number"
                 (should= 3 
-                         (with-in-str tile-choice (attempt-get-number)))))
+                         (with-in-str "3" (attempt-get-number)))))
                         
           (it "returns nil if not number"
-              (let [non-int-choice "3asv"]
                 (should= nil 
-                         (with-in-str non-int-choice (attempt-get-number))))))
+                         (with-in-str "3asv" (attempt-get-number))))
 
 (describe "replay?"
           (it "returns a replay answer of 'n' on second attempt, first attempt being an invalid answer"

@@ -26,13 +26,13 @@
   [depth]
   (> -1 (- maximum-depth depth)))
 
-(declare get-tile-from-comp)
+(declare get-tile-from-computer)
 
 (defn- simulate-next-move
   [board marker perspective depth]
   (let [opp-marker (get-opp-marker marker)]
     (place-mark board
-                (get-tile-from-comp board opp-marker depth)
+                (get-tile-from-computer board opp-marker depth)
                 opp-marker)))
 
 (defn- score-move
@@ -64,7 +64,7 @@
   [idx-scores-map]
   (key (first (sort-by val > idx-scores-map))))
 
-(defn get-tile-from-comp
+(defn get-tile-from-computer
   [board marker depth]
   (get-index-max-score (make-indices-scores-map board
                                                 (get-indices-empty-tiles board)

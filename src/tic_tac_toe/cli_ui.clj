@@ -10,7 +10,8 @@
                                           welcome-message
                                           winner-message]]))
 
-(defn clear-screen []
+(defn clear-screen 
+  []
   (print (str (char 27) "[2J")))
 
 (defn delay-in-secs 
@@ -31,12 +32,11 @@
   [message]
   (println message))
 
-(defn get-string-from-user []
-  (read-line))
+(def get-string-from-user read-line)
 
 (defn attempt-get-number
   []
-  (let [number-choice (read-line)]
+  (let [number-choice (get-string-from-user)]
     (if (re-matches #"\d+" number-choice)
       (read-string number-choice))))
 
@@ -46,7 +46,8 @@
   (display-message (winner-message (:mark player)))
   (newline))
 
-(defn draw-display []
+(defn draw-display 
+  []
   (newline)
   (display-message draw-message)
   (newline))
@@ -60,7 +61,8 @@
   (display-message (format-board-cli board))
   (delay-in-secs delay-time))
 
-(defn starting-display []
+(defn starting-display 
+  []
   (clear-screen)
   (display-message welcome-message))
 
@@ -98,7 +100,8 @@
           (recur))
         picked-number))))
 
-(defn get-replay-answer []
+(defn get-replay-answer 
+  []
   (display-message ask-replay)
   (newline)
   (get-string-from-user))

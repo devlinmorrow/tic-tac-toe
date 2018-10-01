@@ -12,27 +12,18 @@
 
 (describe "not-in-range?"
           (it "is false when tile picked is within range"
-              (let [position 3]
-                (should-not (not-in-range? empty-board position))))
+                (should-not (not-in-range? empty-board 3))))
 
           (it "is true when tile picked is not within range"
-              (let [position 15]
-                (should (not-in-range? empty-board position)))))
+                (should (not-in-range? empty-board 15)))
 
 (describe "tile-marked?"
-          (let [position 0]
             (it "is true when tile already marked"
                 (let [marked-board (conj (vec (repeat 9 player-one-mark)))]
-                  (should (tile-marked? marked-board position))))
+                  (should (tile-marked? marked-board 0))))
 
             (it "is false when tile unmarked"
-                (should-not (tile-marked? empty-board position)))))
-
-(describe "place-mark"
-          (it "replaces element of grid with given mark"
-              (let [position 2]
-                (should= (assoc empty-board position "X")
-                         (place-mark empty-board position "X")))))
+                (should-not (tile-marked? empty-board 0))))
 
 (describe "is-full?"
           (it "is true when board is full of mix of player one and two marks"
@@ -52,7 +43,7 @@
               (should= player-one-mark
                        (winner? ["1" "2" "3" player-one-mark player-one-mark 
                                  player-one-mark "7" "8" "9"])))
-          ; ["1" "2" "3" "4" "5" "6" "7" "8" "9"]
+
           (it "(bot row) returns player one mark when player one wins"
               (should= player-one-mark
                        (winner? ["1" "2" "3" "4" "5" "6" player-one-mark 
