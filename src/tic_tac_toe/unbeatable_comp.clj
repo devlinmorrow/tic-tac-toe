@@ -15,10 +15,10 @@
     player-one-mark))
 
 (defn- score-terminal-board
-  [board marker perspective depth]
+  [board marker perspective depth minimaxer]
   (let [winner (winner? board)]
     (cond
-      (= winner marker) (* (- maximum-depth depth) perspective)
+      (= winner minimaxer) (* (- maximum-depth depth) perspective)
       (nil? winner) tie
       :else (* (- depth maximum-depth) perspective))))
 
@@ -29,38 +29,41 @@
 (declare get-tile-from-computer)
 
 (defn- get-best-next-board-for-marker
-  [board marker perspective depth]
+  [board marker perspective depth minimaxer]
   (let [opp-marker (get-opp-marker marker)]
     (place-mark board
-                (get-tile-from-computer board opp-marker depth)
+                (get-tile-from-computer board opp-marker depth minimaxer)
                 opp-marker)))
 
 (defn- score-move
-  [board marker perspective depth move]
+  [board marker perspective depth minimaxer]
   (if (or (terminal-state? board) (at-max-depth? depth))
-    (score-terminal-board board marker perspective depth)
-    (recur (get-best-next-board-for-marker board marker perspective (inc depth))
+    (score-terminal-board board marker perspective depth minimaxer)
+    (recur (get-best-next-board-for-marker board marker perspective (inc depth) minimaxer)
            (get-opp-marker marker)
            (* -1 perspective)
            (inc depth)
-           move)))
+           move
+           minimaxer)))
 
 (defn- score-moves
-  [board possible-moves marker depth]
+  [board possible-moves marker depth minimaxer]
   (map #(score-move (place-mark board % marker)
                     marker
                     1
                     depth
-                    %)
+                    %
+                    minimaxer)
        possible-moves))
 
 (defn- get-moves-to-scores
-  [board possible-moves marker depth]
+  [board possible-moves marker depth minimaxer]
   (zipmap possible-moves
           (score-moves board 
                        possible-moves 
                        marker 
-                       depth)))
+                       depth
+                       minimaxer)))
 
 (defn- get-index-max-score
   [idx-scores-map]
@@ -74,8 +77,12 @@
                                     depth)))
 
 (defn get-tile-from-computer
-  [board marker depth]
-  (get-max-move (get-moves-to-scores board
-                                     (get-possible-moves board)
-                                     marker
-                                     depth)))
+  [board marker depth minimaxer]
+  (let [moves-to-scores (get-moves-to-scores board
+                                             (get-possible-moves board)
+                                             marker
+                                             depth
+                                             minimaxer)]
+    (if (= marker minimaxer)
+      (get-max-move moves-to-scores)
+      (get-min-move moves-to-scores))))
