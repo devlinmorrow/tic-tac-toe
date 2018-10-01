@@ -2,16 +2,18 @@
 
 (def welcome-message "Welcome to Tic Tac Toe!")
 
-(def ask-for-mode "Please enter 1 for human-vs-human, 2 for human-vs-comp or 
+(def ask-mode "Please enter 1 for human-vs-human, 2 for human-vs-comp or 
                   3 for comp-vs-comp.")
 
-(def ask-for-choice "Please pick a tile number.")
+(def invalid-mode "Uhoh, that's not a valid mode!")
+
+(def ask-for-tile-choice "Please pick a tile number.")
 
 (def already-picked-message "Uhoh, that one's taken!")
 
 (def choice-out-of-range-message "Uhoh, that's not in range!")
 
-(def not-integer-message "Uhoh, that's not a real number!")
+(def not-integer-message "Uhoh, that's not a valid number!")
 
 (def picked-tile-message "Here is the choice: ")
 

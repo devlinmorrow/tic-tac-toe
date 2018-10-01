@@ -22,18 +22,22 @@
       (nil? winner) tie
       :else (* (- depth maximum-depth) perspective))))
 
-(declare choose-best-space)
+(defn- at-max-depth?
+  [depth]
+  (> -1 (- maximum-depth depth)))
+
+(declare get-tile-from-computer)
 
 (defn- simulate-next-move
   [board marker perspective depth]
   (let [opp-marker (get-opp-marker marker)]
     (place-mark board
-                (choose-best-space board opp-marker depth)
+                (get-tile-from-computer board opp-marker depth)
                 opp-marker)))
 
 (defn- score-move
   [board marker perspective depth]
-  (if (terminal-state? board)
+  (if (or (terminal-state? board) (at-max-depth? depth))
     (evaluate-result board marker perspective depth)
     (recur (simulate-next-move board marker perspective (inc depth))
            (get-opp-marker marker)
@@ -60,7 +64,7 @@
   [idx-scores-map]
   (key (first (sort-by val > idx-scores-map))))
 
-(defn choose-best-space
+(defn get-tile-from-computer
   [board marker depth]
   (get-index-max-score (make-indices-scores-map board
                                                 (get-indices-empty-tiles board)

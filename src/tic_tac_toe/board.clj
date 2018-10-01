@@ -1,6 +1,8 @@
 (ns tic-tac-toe.board
   (:require [tic-tac-toe.marks :refer :all]))
 
+(def place-mark assoc)
+
 (defn make-initial-board
   []
   (let [grid-size 3]
@@ -17,10 +19,6 @@
 (defn tile-marked?
   [board position]
   (eq-mark-one-or-two (get board position)))
-
-(defn place-mark
-  [board position mark]
-  (assoc board position mark))
 
 (defn is-full?
   [board]
