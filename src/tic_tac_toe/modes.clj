@@ -5,8 +5,7 @@
                                         clear-screen
                                         delay-in-secs
                                         get-valid-number-without-board
-                                        invalid-data-prompt
-                                        send-message]]))
+                                        invalid-data-prompt]]))
 
 (def game-modes {1 [{:type :human :mark "X"} {:type :human :mark "O"}] 
                  2 [{:type :human :mark "X"} {:type :comp :mark "O"}]

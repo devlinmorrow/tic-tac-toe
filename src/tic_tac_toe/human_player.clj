@@ -11,8 +11,7 @@
                                         format-board-cli
                                         get-string-from-user
                                         get-valid-number-with-board
-                                        invalid-data-prompt
-                                        send-message]]))
+                                        invalid-data-prompt]]))
 
 (defn- get-tile-choice 
   [board delay-time]

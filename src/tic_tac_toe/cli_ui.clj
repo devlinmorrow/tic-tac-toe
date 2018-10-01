@@ -27,7 +27,7 @@
          (apply concat)
          clojure.string/join)))
 
-(defn send-message
+(defn display-message
   [message]
   (println message))
 
@@ -43,30 +43,30 @@
 (defn win-display
   [player]
   (newline)
-  (send-message (winner-message (:mark player)))
+  (display-message (winner-message (:mark player)))
   (newline))
 
 (defn draw-display []
   (newline)
-  (send-message draw-message)
+  (display-message draw-message)
   (newline))
 
 (defn present-move 
   [board delay-time]
   (clear-screen)
   (newline)
-  (send-message picked-tile-message)
+  (display-message picked-tile-message)
   (newline)
-  (send-message (format-board-cli board))
+  (display-message (format-board-cli board))
   (delay-in-secs delay-time))
 
 (defn starting-display []
   (clear-screen)
-  (send-message welcome-message))
+  (display-message welcome-message))
 
 (defn invalid-data-prompt 
   [invalid-data-reason delay-time]
-  (send-message invalid-data-reason)
+  (display-message invalid-data-reason)
   (delay-in-secs delay-time)
   (clear-screen))
 
@@ -75,7 +75,7 @@
   (loop []
     (clear-screen)
     (newline)
-    (send-message request-message)
+    (display-message request-message)
     (let [picked-number (attempt-get-number)]
       (if (nil? picked-number)
         (do
@@ -88,9 +88,9 @@
   (loop []
     (clear-screen)
     (newline)
-    (send-message (format-board-cli board))
+    (display-message (format-board-cli board))
     (newline)
-    (send-message request-message)
+    (display-message request-message)
     (let [picked-number (attempt-get-number)]
       (if (nil? picked-number)
         (do
@@ -99,7 +99,7 @@
         picked-number))))
 
 (defn get-replay-answer []
-  (send-message ask-replay)
+  (display-message ask-replay)
   (newline)
   (get-string-from-user))
 
@@ -114,5 +114,5 @@
 
 (defn goodbye-display 
   [delay-time]
-  (send-message goodbye)
+  (display-message goodbye)
   (delay-in-secs delay-time))

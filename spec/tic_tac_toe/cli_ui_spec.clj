@@ -11,11 +11,11 @@
                 (should= cli-formatted-board
                          (format-board-cli empty-board)))))
 
-(describe "send-message"
+(describe "display-message"
           (it "sends message to output"
               (let [message "Hello, world!"]
                 (should= (str message "\n")
-                         (with-out-str (send-message message))))))
+                         (with-out-str (display-message message))))))
 
 (describe "attempt-get-number"
           (it "returns number if number"

@@ -6,8 +6,7 @@
             [tic-tac-toe.cli-ui :refer [clear-screen
                                         delay-in-secs
                                         goodbye-display
-                                        replay?
-                                        send-message]]))
+                                        replay?]]))
 
 (defn -main 
   []

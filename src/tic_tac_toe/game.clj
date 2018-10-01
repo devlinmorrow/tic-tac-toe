@@ -15,7 +15,6 @@
                                         draw-display
                                         format-board-cli
                                         present-move
-                                        send-message
                                         starting-display
                                         win-display]]))
 
