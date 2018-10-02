@@ -36,20 +36,22 @@
                 opp-marker)))
 
 (defn- score-move
-  [board marker perspective depth]
+  [board marker perspective depth move]
   (if (or (terminal-state? board) (at-max-depth? depth))
-    (evaluate-result board marker perspective depth)
+    [(evaluate-result board marker perspective depth) move]
     (recur (simulate-next-move board marker perspective (inc depth))
            (get-opp-marker marker)
            (* -1 perspective)
-           (inc depth))))
+           (inc depth)
+           move)))
 
 (defn- score-moves
   [board empty-indices marker depth]
   (map #(score-move (place-mark board % marker)
                     marker
                     1
-                    depth)
+                    depth
+                    %)
        empty-indices))
 
 (defn- make-indices-scores-map
@@ -62,11 +64,11 @@
 
 (defn- get-index-max-score
   [idx-scores-map]
-  (key (first (sort-by val > idx-scores-map))))
+ (last (apply max-key first idx-scores-map)))
 
 (defn get-tile-from-computer
   [board marker depth]
-  (get-index-max-score (make-indices-scores-map board
-                                                (get-indices-empty-tiles board)
-                                                marker
-                                                depth)))
+  (get-index-max-score (score-moves board
+                                    (get-indices-empty-tiles board)
+                                    marker
+                                    depth)))
