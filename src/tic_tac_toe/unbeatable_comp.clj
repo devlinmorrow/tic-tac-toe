@@ -136,7 +136,7 @@
   (reduce (fn [best-choice next-possible-move] 
             (if (>= (:alpha best-choice) (:beta best-choice))
               (do
-                (println (str "reduce same best choice "best-choice))
+                (println (str "HERE reduce same best choice "best-choice))
               best-choice)
               (let [scored-move (score-move best-choice
                           (place-mark board next-possible-move marker)
