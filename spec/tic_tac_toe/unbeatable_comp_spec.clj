@@ -194,29 +194,6 @@
                                   {:beta -5}
                                   -7))))
 
-(describe "generate-best-choice"
-          (it "generates new best choice map with higher score (while minimaxer)"
-              (should= {:best-score 10 :best-move 8 :alpha 10 :beta -3}
-              (generate-best-choice {:best-score 8 :best-move 3 :alpha 8 :beta -3}
-                                    ["1" "2" "3"
-                                     "4" "5" "6"
-                                    player-two-mark player-two-mark player-two-mark]
-                                    player-two-mark
-                                    0
-                                    8
-                                    player-two-mark)))
-                       
-          (it "generates new best choice map with lower score (while opponent)"
-              (should= {:best-score -5 :best-move 2 :alpha 8 :beta -5}
-              (generate-best-choice {:best-score 8 :best-move 3 :alpha 8 :beta -3}
-                                    [player-one-mark player-one-mark player-one-mark
-                                     "4" "5" "6"
-                                    player-two-mark player-two-mark "9"]
-                                    player-one-mark
-                                    5
-                                    2
-                                    player-two-mark))))
-
 (describe "get-tile-unbeatable-computer"
           (it "gets best tile position - 1"
 

@@ -26,26 +26,17 @@
   (>= depth maximum-depth))
 
 (defn score-terminal-board
-  [board depth minimaxer]
+  [board depth maximiser]
   (let [winner (winner? board)]
     (cond
-      (= winner minimaxer) (- maximum-depth depth)
+      (= winner maximiser) (- maximum-depth depth)
       (nil? winner) tie
       :else (- depth maximum-depth))))
 
-(declare get-tile-from-computer)
-
-(defn get-best-next-board-for-marker
-  [board marker depth minimaxer]
-  (let [opp-marker (get-opp-marker marker)]
-    (place-mark board
-                (get-tile-from-computer board opp-marker depth minimaxer)
-                opp-marker)))
-
 (defn find-best-score
-  [marker minimaxer best-choice score]
-  (let [best-score (:best-score best-choice)]
-    (if (= marker minimaxer) 
+  [marker maximiser current-best score]
+  (let [best-score (:best-score current-best)]
+    (if (= marker maximiser) 
       (if (or (nil? best-score) 
               (> score best-score)) 
         score 
@@ -56,10 +47,10 @@
         best-score))))
 
 (defn find-best-move
-  [marker minimaxer best-choice score move]
-  (let [best-score (:best-score best-choice)
-        best-move (:best-move best-choice)]
-    (if (= marker minimaxer) 
+  [marker maximiser current-best score move]
+  (let [best-score (:best-score current-best)
+        best-move (:best-move current-best)]
+    (if (= marker maximiser) 
       (if (or (nil? best-score)(> score best-score)) 
         move 
         best-move)
@@ -69,94 +60,95 @@
         best-move))))
 
 (defn find-alpha
-  [marker minimaxer best-choice score]
-  (let [current-alpha (:alpha best-choice)]
-    (if (= marker minimaxer) 
+  [marker maximiser current-best score]
+  (let [current-alpha (:alpha current-best)]
+    (if (= marker maximiser) 
       (if (> score current-alpha) 
         score 
         current-alpha)
       current-alpha)))
 
 (defn find-beta
-  [marker minimaxer best-choice score]
-  (let [current-beta (:beta best-choice)]
-    (if (not= marker minimaxer) 
+  [marker maximiser current-best score]
+  (let [current-beta (:beta current-best)]
+    (if (not= marker maximiser) 
       (if (< score current-beta) 
         score 
         current-beta) 
       current-beta)))
 
 (defn generate-best-choice
-  [best-choice board marker depth move minimaxer]
-  (let [score (score-terminal-board board
-                                    depth 
-                                    minimaxer)
-        best-score (find-best-score marker 
-                                    minimaxer
-                                    best-choice
-                                    score)
+  [current-best new-score new-move board marker depth  maximiser]
+  (let [best-score (find-best-score marker 
+                                    maximiser
+                                    current-best
+                                    new-score)
         best-move (find-best-move marker 
-                                  minimaxer
-                                  best-choice
-                                  score
-                                  move)
+                                  maximiser
+                                  current-best
+                                  new-score
+                                  new-move)
         alpha (find-alpha marker 
-                          minimaxer
-                          best-choice
-                          score)
+                          maximiser
+                          current-best
+                          new-score)
         beta (find-beta marker 
-                        minimaxer
-                        best-choice
-                        score)]
-    (println (str "  best-score  " best-score "  best-move  " best-move "  alpha  " alpha "  beta  " beta))
+                        maximiser
+                        current-best
+                        new-score)]
     {:best-score best-score
      :best-move best-move
      :alpha alpha
      :beta beta}))
 
-(defn score-move
-  [best-choice board marker depth move minimaxer]
-  (println best-choice board marker depth move minimaxer)
-  (if (terminal-state? board)
-    (generate-best-choice best-choice
-                          board
-                          marker
-                          depth
-                          move
-                          minimaxer)
-    (recur best-choice 
-           (get-best-next-board-for-marker board marker (inc depth) minimaxer)
-           marker
-           (inc depth)
-           move
-           minimaxer)))
+(declare minimax)
 
-(defn get-optimum-move
-  [board possible-moves marker depth minimaxer]
-  (reduce (fn [best-choice next-possible-move] 
-            (if (>= (:alpha best-choice) (:beta best-choice))
-              (do
-                (println (str "HERE reduce same best choice "best-choice))
-              best-choice)
-              (let [scored-move (score-move best-choice
+(defn score-move
+  [current-best board marker depth move maximiser]
+  (if (terminal-state? board)
+    (let [score (score-terminal-board board
+                                      depth 
+                                      maximiser)]
+      (generate-best-choice current-best
+                            score
+                            move
+                            board
+                            marker
+                            depth
+                            maximiser))
+    (let [score (:best-score (minimax board
+                                      (get-opp-marker marker)
+                                      (inc depth)
+                                      maximiser))]
+      (generate-best-choice current-best
+                            score
+                            move
+                            board
+                            marker
+                            depth
+                            maximiser))))
+
+(defn minimax
+  [board marker depth maximiser]
+  (reduce (fn [current-best next-possible-move] 
+            (if (>= (:alpha current-best) (:beta current-best))
+              current-best
+              (score-move current-best
                           (place-mark board next-possible-move marker)
                           marker
                           depth
                           next-possible-move
-                          minimaxer)]
-                (do (println (str "reduce updated scored move  " scored-move))
-                    scored-move))))
+                          maximiser)))
           {:best-score nil
            :best-move nil 
            :alpha -100
            :beta 100}
-          possible-moves))
+          (get-possible-moves board)))
 
 (defn get-tile-from-computer
-  [board marker depth minimaxer]
-  (let [optimum-move (get-optimum-move board
-                                       (get-possible-moves board)
-                                       marker
-                                       depth
-                                       minimaxer)]
+  [board marker depth maximiser]
+  (let [optimum-move (minimax board
+                              marker
+                              depth
+                              maximiser)]
     (:best-move optimum-move)))
