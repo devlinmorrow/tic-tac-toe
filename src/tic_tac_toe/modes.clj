@@ -8,8 +8,8 @@
                                         invalid-data-prompt]]))
 
 (def game-modes {1 [{:type :human :mark "X"} {:type :human :mark "O"}] 
-                 2 [{:type :human :mark "X"} {:type :comp :mark "O"}]
-                 3 [{:type :comp :mark "X"} {:type :comp :mark "O"}]})
+                 2 [{:type :human :mark "X"} {:type :computer :mark "O"}]
+                 3 [{:type :computer :mark "X"} {:type :computer :mark "O"}]})
 
 (defn get-mode
   [delay-time]
