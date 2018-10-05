@@ -5,6 +5,10 @@
                                        winner?]]
             [tic-tac-toe.marks :refer :all]))
 
+(def empty-board (into [] (map str (range 1 10))))
+(def single-marked-board (place-mark empty-board
+                                     0
+                                     player-one-mark))
 (def tie 0)
 (def maximum-depth 10)
 
@@ -29,14 +33,6 @@
   (or (nil? (first current-min)) 
       (< (first next-scored-move) 
          (first current-min))))
-
-(defn- get-min-scoring-move
-  [idx-scores-map]
-  (apply min-key first idx-scores-map))
-
-(defn- get-max-scoring-move
-  [idx-scores-map]
-  (apply max-key first idx-scores-map))
 
 (defn score-terminal-board
   [board depth maximiser]
@@ -93,4 +89,7 @@
 
 (defn get-tile-from-computer
   [board marker depth maximiser]
-  (last (maximise board marker depth maximiser)))
+  (cond
+    (= board empty-board) 0
+    (= board single-marked-board) 4
+  :else (last (maximise board marker depth maximiser))))
