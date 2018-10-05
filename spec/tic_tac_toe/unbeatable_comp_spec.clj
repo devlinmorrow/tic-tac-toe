@@ -15,187 +15,205 @@
               (should= player-two-mark
                        (get-opp-marker player-one-mark))))
 
-(describe "get-min-scoring-move"
-          (it "gets the move with the lowest score from a collection"
-              (should= 2
-                       (get-min-scoring-move '([10 0] [4 1] [-8 2])))))
-
-(describe "get-max-scoring-move"
-          (it "gets the move with the highest score from a collection"
-              (should= 0
-                       (get-max-scoring-move '([10 0] [4 1] [-8 2])))))
-
-(describe "at-max-depth?"
-          (it "is true if depth passed in is equal to or greater than to max"
-              (should (at-max-depth? 10)))
-
-          (it "is false if depth passed in is less than max"
-              (should-not (at-max-depth? 9))))
-
-(describe "score-terminal-board"
-          (it "is 10 when winner is same as minimaxer and depth is 0"
-              (should= 10
-                       (score-terminal-board [player-two-mark player-two-mark player-two-mark
-                                              "4" "5" "6"
-                                              "7" player-one-mark player-one-mark]
-                                             0
-                                             player-two-mark)))
-
-          (it "is 5 when winner is same as minimaxer and depth is 5"
-              (should= 5
-                       (score-terminal-board [player-two-mark player-two-mark player-two-mark
-                                              "4" "5" "6"
-                                              "7" player-one-mark player-one-mark]
-                                             5
-                                             player-two-mark)))
-
-          (it "is -5 when winner is not same as minimaxer and depth is 5"
-              (should= -5
-                       (score-terminal-board [player-two-mark player-two-mark player-two-mark
-                                              "4" "5" "6"
-                                              "7" player-one-mark player-one-mark]
-                                             5
-                                             player-one-mark))))
-
-(describe "find-best-score"
-          (it "returns higher current score rather than previous best score (while minimaxer)"
-              (should= 8
-                       (find-best-score player-two-mark
-                                        player-two-mark
-                                        {:best-score 7}
-                                        8)))
-
-          (it "returns current score if previous best score is nil (while minimaxer)"
-              (should= 8
-                       (find-best-score player-two-mark
-                                        player-two-mark
-                                        {:best-score nil}
-                                        8)))
-
-          (it "returns previous best score which is still higher than current score (while minimaxer)"
-              (should= 7
-                       (find-best-score player-two-mark
-                                        player-two-mark
-                                        {:best-score 7}
-                                        5)))
-
-          (it "returns lower current score (while opponent)"
-              (should= 5
-                       (find-best-score player-one-mark
-                                        player-two-mark
-                                        {:best-score 7}
-                                        5)))
-
-          (it "returns current score if previous best score is nil (while opponent)"
-              (should= 8
-                       (find-best-score player-one-mark
-                                        player-two-mark
-                                        {:best-score nil}
-                                        8)))
-
-          (it "returns previous best score which is still lower than current score (while opponent)"
-              (should= 7
-                       (find-best-score player-one-mark
-                                        player-two-mark
-                                        {:best-score 7}
-                                        8))))
-
-
-(describe "find-best-move"
-          (it "returns current move (while minimaxer, current score higher than best score)"
-              (should= 5
-                       (find-best-move player-two-mark
-                                       player-two-mark
-                                       {:best-score 7 :best-move 3}
-                                       8
-                                       5)))
-
-          (it "returns previous best move (while minimaxer, current score lower than best score)"
-              (should= 3
-                       (find-best-move player-two-mark
-                                       player-two-mark
-                                       {:best-score 9 :best-move 3}
-                                       8
-                                       5)))
-
-          (it "returns current move (while minimaxer, previous best score nil)"
-              (should= 5
-                       (find-best-move player-two-mark
-                                       player-two-mark
-                                       {:best-score nil :best-move nil}
-                                       5
-                                       5)))
-
-          (it "returns current move (while opponent, current score lower than best score)"
-              (should= 5
-                       (find-best-move player-one-mark
-                                       player-two-mark
-                                       {:best-score 7 :best-move 3}
-                                       5
-                                       5)))
-
-          (it "returns previous best move (while opponent, current score higher than best score)"
-              (should= 3
-                       (find-best-move player-one-mark
-                                       player-two-mark
-                                       {:best-score 7 :best-move 3}
-                                       8
-                                       5)))
-
-          (it "returns current move (while opponent, previous best score nil)"
-              (should= 5
-                       (find-best-move player-one-mark
-                                       player-two-mark
-                                       {:best-score nil :best-move nil}
-                                       8
-                                       5))))
-
-(describe "find-alpha"
-          (it "returns current alpha (while minimaxer, current alpha higher than best alpha)"
-              (should= 8
-                       (find-alpha player-two-mark
-                                   player-two-mark
-                                   {:alpha 5}
-                                   8)))
-
-          (it "returns previous best alpha (while minimaxer, current alpha lower than best alpha)"
-              (should= 5
-                       (find-alpha player-two-mark
-                                   player-two-mark
-                                   {:alpha 5}
-                                   3)))
-
-          (it "returns previous best alpha (while opponent)"
-              (should= 5
-                       (find-alpha player-one-mark
-                                   player-two-mark
-                                   {:alpha 5}
-                                   7))))
-
-(describe "find-beta"
-          (it "returns current beta (while opponent, current beta lower than best beta)"
-              (should= -8
-                       (find-beta player-one-mark
-                                  player-two-mark
-                                  {:beta -5}
-                                  -8)))
-
-          (it "returns previous best beta (while opponent, current beta lower than best beta)"
-              (should= -5
-                       (find-beta player-one-mark
-                                  player-two-mark
-                                  {:beta -5}
-                                  -3)))
-
-          (it "returns previous best beta (while minimaxer)"
-              (should= -5
-                       (find-beta player-two-mark
-                                  player-two-mark
-                                  {:beta -5}
-                                  -7))))
+;(describe "at-max-depth?"
+;          (it "is true if depth passed in is equal to or greater than to max"
+;              (should (at-max-depth? 10)))
+;
+;          (it "is false if depth passed in is less than max"
+;              (should-not (at-max-depth? 9))))
+;
+;(describe "score-terminal-board"
+;          (it "is 10 when winner is same as minimaxer and depth is 0"
+;              (should= 10
+;                       (score-terminal-board [player-two-mark player-two-mark player-two-mark
+;                                              "4" "5" "6"
+;                                              "7" player-one-mark player-one-mark]
+;                                             0
+;                                             player-two-mark)))
+;
+;          (it "is 5 when winner is same as minimaxer and depth is 5"
+;              (should= 5
+;                       (score-terminal-board [player-two-mark player-two-mark player-two-mark
+;                                              "4" "5" "6"
+;                                              "7" player-one-mark player-one-mark]
+;                                             5
+;                                             player-two-mark)))
+;
+;          (it "is -5 when winner is not same as minimaxer and depth is 5"
+;              (should= -5
+;                       (score-terminal-board [player-two-mark player-two-mark player-two-mark
+;                                              "4" "5" "6"
+;                                              "7" player-one-mark player-one-mark]
+;                                             5
+;                                             player-one-mark))))
+;
+;(describe "find-best-score"
+;          (it "returns higher current score rather than previous best score (while minimaxer)"
+;              (should= 8
+;                       (find-best-score player-two-mark
+;                                        player-two-mark
+;                                        {:best-score 7}
+;                                        8)))
+;
+;          (it "returns current score if previous best score is nil (while minimaxer)"
+;              (should= 8
+;                       (find-best-score player-two-mark
+;                                        player-two-mark
+;                                        {:best-score nil}
+;                                        8)))
+;
+;          (it "returns previous best score which is still higher than current score (while minimaxer)"
+;              (should= 7
+;                       (find-best-score player-two-mark
+;                                        player-two-mark
+;                                        {:best-score 7}
+;                                        5)))
+;
+;          (it "returns lower current score (while opponent)"
+;              (should= 5
+;                       (find-best-score player-one-mark
+;                                        player-two-mark
+;                                        {:best-score 7}
+;                                        5)))
+;
+;          (it "returns current score if previous best score is nil (while opponent)"
+;              (should= 8
+;                       (find-best-score player-one-mark
+;                                        player-two-mark
+;                                        {:best-score nil}
+;                                        8)))
+;
+;          (it "returns previous best score which is still lower than current score (while opponent)"
+;              (should= 7
+;                       (find-best-score player-one-mark
+;                                        player-two-mark
+;                                        {:best-score 7}
+;                                        8))))
+;
+;
+;(describe "find-best-move"
+;          (it "returns current move (while minimaxer, current score higher than best score)"
+;              (should= 5
+;                       (find-best-move player-two-mark
+;                                       player-two-mark
+;                                       {:best-score 7 :best-move 3}
+;                                       8
+;                                       5)))
+;
+;          (it "returns previous best move (while minimaxer, current score lower than best score)"
+;              (should= 3
+;                       (find-best-move player-two-mark
+;                                       player-two-mark
+;                                       {:best-score 9 :best-move 3}
+;                                       8
+;                                       5)))
+;
+;          (it "returns current move (while minimaxer, previous best score nil)"
+;              (should= 5
+;                       (find-best-move player-two-mark
+;                                       player-two-mark
+;                                       {:best-score nil :best-move nil}
+;                                       5
+;                                       5)))
+;
+;          (it "returns current move (while opponent, current score lower than best score)"
+;              (should= 5
+;                       (find-best-move player-one-mark
+;                                       player-two-mark
+;                                       {:best-score 7 :best-move 3}
+;                                       5
+;                                       5)))
+;
+;          (it "returns previous best move (while opponent, current score higher than best score)"
+;              (should= 3
+;                       (find-best-move player-one-mark
+;                                       player-two-mark
+;                                       {:best-score 7 :best-move 3}
+;                                       8
+;                                       5)))
+;
+;          (it "returns current move (while opponent, previous best score nil)"
+;              (should= 5
+;                       (find-best-move player-one-mark
+;                                       player-two-mark
+;                                       {:best-score nil :best-move nil}
+;                                       8
+;                                       5))))
+;
+;(describe "find-alpha"
+;          (it "returns current alpha (while minimaxer, current alpha higher than best alpha)"
+;              (should= 8
+;                       (find-alpha player-two-mark
+;                                   player-two-mark
+;                                   8
+;                                   5)))
+;
+;          (it "returns previous best alpha (while minimaxer, current alpha lower than best alpha)"
+;              (should= 5
+;                       (find-alpha player-two-mark
+;                                   player-two-mark
+;                                   3
+;                                   5)))
+;
+;          (it "returns previous best alpha (while opponent)"
+;              (should= 5
+;                       (find-alpha player-one-mark
+;                                   player-two-mark
+;                                   7
+;                                   5)))
+;
+;          (it "returns initial alpha when alpha nil (while opponent)"
+;              (should= -1000
+;                       (find-alpha player-one-mark
+;                                   player-two-mark
+;                                   7
+;                                   nil)))
+;
+;          (it "returns current score when alpha nil (while minimaxer)"
+;              (should= 7
+;                       (find-alpha player-two-mark
+;                                   player-two-mark
+;                                   7
+;                                   nil))))
+;
+;(describe "find-beta"
+;          (it "returns current beta (while opponent, current beta lower than best beta)"
+;              (should= -8
+;                       (find-beta player-one-mark
+;                                  player-two-mark
+;                                  -8
+;                                  -5)))
+;
+;          (it "returns previous best beta (while opponent, current beta lower than best beta)"
+;              (should= -5
+;                       (find-beta player-one-mark
+;                                  player-two-mark
+;                                  -3
+;                                  -5)))
+;
+;          (it "returns previous best beta (while minimaxer)"
+;              (should= -5
+;                       (find-beta player-two-mark
+;                                  player-two-mark
+;                                  -7
+;                                  -5)))
+;
+;          (it "returns initial beta when beta nil (while minimaxer)"
+;              (should= 1000
+;                       (find-beta player-two-mark
+;                                  player-two-mark
+;                                  7
+;                                  nil)))
+;
+;          (it "returns current score when beta nil (while opponent)"
+;              (should= -5
+;                       (find-beta player-one-mark
+;                                  player-two-mark
+;                                  -5
+;                                  nil))))
 
 (describe "get-tile-unbeatable-computer"
-          (it "gets best tile position - 1"
+          (it "gets best tile position - example 1"
 
               ; 1 X O
               ; O O X
@@ -208,7 +226,7 @@
                 (should= 0
                          (get-tile-from-computer board player-two-mark starting-depth player-two-mark))))
 
-          (it "gets best tile position - 1"
+          (it "gets best tile position - example 2"
 
               ; O X O
               ; O O X
@@ -221,7 +239,7 @@
                 (should= 8
                          (get-tile-from-computer board player-two-mark starting-depth player-two-mark))))
 
-          (it "gets best tile position - 2"
+          (it "gets best tile position - example 3"
 
               ; O X O
               ; 4 5 X
@@ -234,7 +252,7 @@
                 (should= 4
                          (get-tile-from-computer board player-two-mark starting-depth player-two-mark))))
 
-          (it "gets best tile position - 3"
+          (it "gets best tile position - example 4"
 
               ; O 2 X
               ; X 5 6
@@ -247,7 +265,7 @@
                 (should= 4
                          (get-tile-from-computer board player-two-mark starting-depth player-two-mark))))
 
-          (it "gets best tile position - 4"
+          (it "gets best tile position - example 5"
 
               ; X X 3
               ; 4 X 6
@@ -260,7 +278,7 @@
                 (should= 7
                          (get-tile-from-computer board player-two-mark starting-depth player-two-mark))))
 
-          (it "gets best tile position - 5"
+          (it "gets best tile position - example 6"
 
               ; X 2 O
               ; O 5 6
@@ -273,7 +291,7 @@
                 (should= 4
                          (get-tile-from-computer board player-two-mark starting-depth player-two-mark))))
 
-          (it "gets best tile position - 6 - testing depth so that it loses in as many turns as possible"
+          (it "gets best tile position - example 7 - testing depth so that it loses in as many turns as possible"
 
               ; 1 X 3
               ; 4 5 X
@@ -286,7 +304,7 @@
                 (should= 2
                          (get-tile-from-computer board player-two-mark starting-depth player-two-mark))))
 
-          (it "gets best tile position - 7 - player one is minimaxer"
+          (it "gets best tile position - example 8 - player one is minimaxer"
 
               ; O O X
               ; 4 X 6
