@@ -28,86 +28,42 @@
 (declare maximise)
 (declare minimise)
 
-(defn minimise 
-  [board marker depth maximiser]
-  (reduce (fn [current-best next-possible-move] 
-            (if (and (some? (:alpha current-best)) 
-                     (some? (:beta current-best))
-                     (> (:alpha current-best) (:beta current-best)))
-              current-best
-              (let [current-score (:current-score current-best)
-                    next-score (if (terminal-state? board) 
-                                 (score-terminal-board board
-                                                       depth
-                                                       maximiser)
-                                 (let [next-marker (get-opp-marker marker)] 
-                                   (:current-score (maximise (place-mark board next-possible-move next-marker)
-                                                             next-marker
-                                                             (inc depth)
-                                                             maximiser))))
-                    updated-score (if (or (nil? current-score) 
-                                          (> next-score current-score))
-                                    next-score
-                                    current-score)
-                    current-beta (:beta current-best)
-                    updated-beta (if (< updated-score current-beta)
-                                    updated-score
-                                    current-beta)]
-                {:current-score updated-score
-                 :alpha (:alpha current-best)
-                 :beta updated-beta})))
-          {:current-score nil
-           :alpha nil
-           :beta nil}
-          (get-possible-moves board)))
-
 (defn maximise
-  [board marker depth maximiser]
-  (reduce (fn [current-best next-possible-move] 
-            (let [new-score-if-terminal (if (terminal-state? board) 
-                                 (score-terminal-board board
-                                                       depth
-                                                       maximiser))
-                  current-score (:current-score current-best)
-                    updated-score (if (or (nil? current-score) 
-                                          (> new-score-if-terminal current-score))
-                                    new-score-if-terminal
-                                    current-score)]
-            (if (>= (:alpha current-best) (:beta current-best))
-              {:current-score updated-score
-               :alpha (:alpha current-best)
-               :beta (:beta current-best)
-                                 (let [next-marker (get-opp-marker marker)] 
-                                    (minimise (place-mark board next-possible-move next-marker)
+  [board marker depth maximiser higher-alpha higher-beta]
+  (if (terminal-state? board) 
+    {:current-score (score-terminal-board board 
+                                          depth 
+                                          maximiser)}
+    (reduce (fn [current-stuff next-possible-move]
+              (let [current-alpha (:alpha current-stuff)
+                    new-alpha (if (or (nil? current-alpha)
+                                      (> higher-alpha current-alpha))
+                                higher-alpha
+                                current-alpha)]
+                (if (and (some? new-alpha)
+                         (some? new-beta)
+                         (> new-alpha new-beta))
+                  current-stuff
+                  (let [current-score (:current-score current-stuff)
+                        next-marker (get-opp-marker marker)
+                        next-score (:current-score (minimise (place-mark board next-possible-move next-marker)
                                                              next-marker
                                                              (inc depth)
-                                                             maximiser)))))
-          {:current-score nil
-           :alpha -1000
-           :beta 1000}
-          (get-possible-moves board)))
-
-              (let [current-score (:current-score current-best)
-                    next-score (if (terminal-state? board) 
-                                 (score-terminal-board board
-                                                       depth
-                                                       maximiser)
-                                 (let [next-marker (get-opp-marker marker)] 
-                                   (:current-score (minimise (place-mark board next-possible-move next-marker)
-                                                             next-marker
-                                                             (inc depth)
-                                                             maximiser))))
-                    current-alpha (:current-alpha current-best)
-                    updated-alpha (if (> updated-score current-alpha)
-                                    updated-score
-                                    current-alpha)]
-                {:current-score updated-score
-                 :alpha updated-alpha
-                 :beta (:beta current-best)})))
-          {:current-score nil
-           :alpha -1000
-           :beta 1000}
-          (get-possible-moves board)))
+                                                             maximiser
+                                                             new-alpha
+                                                             new-beta))
+                        updated-score (if (or (nil? current-score) 
+                                              (> next-score current-score))
+                                        next-score
+                                        current-score)
+                        updated-alpha (if (> updated-score new-alpha)
+                                        updated-score
+                                        new-alpha)]
+                    {:current-score updated-score
+                     :alpha updated-alpha
+                     :beta new-beta}))))
+            {:current-score nil}
+            (get-possible-moves board))))
 
 (defn get-tile-from-computer
   [board marker depth maximiser]
