@@ -30,7 +30,7 @@
   [player board delay-time]
   (if (= :human (:type player))
     (get-tile-from-user board delay-time)
-    (get-tile-from-computer board (:mark player) starting-depth (:mark player))))
+    (get-tile-from-computer board (:mark player))))
 
 (defn- make-move
   [current-board current-player delay-time]

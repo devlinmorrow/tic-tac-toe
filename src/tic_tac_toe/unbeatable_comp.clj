@@ -5,16 +5,8 @@
                                        winner?]]
             [tic-tac-toe.marks :refer :all]))
 
-(def empty-board (into [] (map str (range 1 10))))
-(def single-marked-board (place-mark empty-board
-                                     0
-                                     player-one-mark))
-(def tie 0)
+(def tied-score 0)
 (def maximum-depth 10)
-
-(defn maximising-depth?
-  [depth]
-  (= 0 (mod depth 2)))
 
 (defn- get-opp-marker
   [marker]
@@ -22,74 +14,46 @@
     player-two-mark 
     player-one-mark))
 
-(defn next-score-greater?
-  [current-max next-scored-move]
-  (or (nil? (first current-max)) 
-      (> (first next-scored-move) 
-         (first current-max))))
-
-(defn next-score-lower?
-  [current-min next-scored-move]
-  (or (nil? (first current-min)) 
-      (< (first next-scored-move) 
-         (first current-min))))
-
-(defn score-terminal-board
-  [board depth maximiser]
-  (let [winner (winner? board)]
-    (cond
-      (nil? winner) tie
-      (= winner maximiser) (- maximum-depth depth)
-      :else (- depth maximum-depth))))
-
 (declare maximise)
-(declare minimise)
-
-(defn score-move
-  [board marker depth move maximiser]
-  (if (terminal-state? board)
-    [(score-terminal-board board depth maximiser) move]
-    (if (= marker maximiser)
-      [(first (minimise board
-                        (get-opp-marker marker)
-                        (inc depth)
-                        maximiser)) move]
-      [(first (maximise board
-                        (get-opp-marker marker)
-                        (inc depth)
-                        maximiser)) move])))
 
 (defn minimise
-  [board marker depth maximiser]
-  (reduce (fn [current-min next-possible-move]
-            (let [next-scored-move (score-move (place-mark board next-possible-move marker)
-                                               marker
-                                               depth
-                                               next-possible-move
-                                               maximiser)]
-              (if (next-score-lower? current-min next-scored-move)
-                next-scored-move
-                current-min)))
+  [board marker depth]
+  (reduce (fn [current-score-to-move next-possible-move]
+            (let [simulated-board (place-mark board next-possible-move marker)
+                  next-score (if (terminal-state? simulated-board)
+                               (let [winner (winner? simulated-board)]
+                                 (cond 
+                                   (nil? winner) tied-score
+                                   (= marker winner) (- depth maximum-depth)
+                                   :else (- maximum-depth depth)))
+                               (first (maximise simulated-board (get-opp-marker marker) (inc depth))))
+                  current-min-score (first current-score-to-move)]
+              (if (or (nil? current-min-score)
+                      (< next-score current-min-score))
+                [next-score next-possible-move]
+                current-score-to-move)))
           [nil nil]
           (get-possible-moves board)))
 
 (defn maximise
-  [board marker depth maximiser]
-  (reduce (fn [current-max next-possible-move]
-            (let [next-scored-move (score-move (place-mark board next-possible-move marker)
-                                               marker
-                                               depth
-                                               next-possible-move
-                                               maximiser)]
-              (if (next-score-greater? current-max next-scored-move)
-                next-scored-move
-                current-max)))
+  [board marker depth]
+  (reduce (fn [current-score-to-move next-possible-move]
+            (let [simulated-board (place-mark board next-possible-move marker)
+                  next-score (if (terminal-state? simulated-board)
+                               (let [winner (winner? simulated-board)]
+                                 (cond 
+                                   (nil? winner) tied-score
+                                   (= marker winner) (- maximum-depth depth)
+                                   :else (- depth maximum-depth)))
+                               (first (minimise simulated-board (get-opp-marker marker) (inc depth))))
+                  current-max-score (first current-score-to-move)]
+              (if (or (nil? current-max-score)
+                      (> next-score current-max-score))
+                [next-score next-possible-move]
+                current-score-to-move)))
           [nil nil]
           (get-possible-moves board)))
 
 (defn get-tile-from-computer
-  [board marker depth maximiser]
-  (cond
-    (= board empty-board) 0
-    (= board single-marked-board) 4
-  :else (last (maximise board marker depth maximiser))))
+  [board marker]
+  (last (maximise board marker 0)))
