@@ -4,7 +4,7 @@
                                                                      winner?]]
                                           [tic-tac-toe.marks :refer :all])) 
 
-(def tie 0)
+(def tied-score 0)
 (def maximum-depth 10)
 
 (defn get-opp-marker
@@ -13,62 +13,102 @@
     player-two-mark 
     player-one-mark))
 
-(defn at-max-depth?
-  [depth]
-  (>= depth maximum-depth))
-
-(defn score-terminal-board
-  [board depth maximiser]
-  (let [winner (winner? board)]
-    (cond
-      (= winner maximiser) (- maximum-depth depth)
-      (nil? winner) tie
-      :else (- depth maximum-depth))))
-
 (declare maximise)
-(declare minimise)
+
+(defn minimise
+  [board marker depth higher-alpha higher-beta]
+  (reduce (fn [current-stuff next-possible-move]
+            (let [simulated-board (place-mark board next-possible-move marker)
+                  current-alpha (:alpha current-stuff)
+                  current-beta (:beta current-stuff)
+                  next-stuff (if (and (some? current-alpha)
+                                      (some? current-beta)
+                                      (> current-alpha current-beta))
+                               current-stuff
+                               (let [next-possible-score (if (terminal-state? simulated-board)
+                                                          (let [winner (winner? simulated-board)]
+                                                            (cond
+                                                            (nil? winner) tied-score
+                                                            (= marker winner) (- depth maximum-depth)
+                                                            :else (- maximum-depth depth)))
+                                                          (:current-score (maximise simulated-board 
+                                                                                    (get-opp-marker marker) 
+                                                                                    (inc depth) 
+                                                                                    current-alpha 
+                                                                                    current-beta)))
+                                     current-score (:current-score current-stuff)
+                                     next-score-better? (or (nil? current-score)
+                                                            (< next-possible-score current-score))
+                                     next-score (if next-score-better?
+                                                  next-possible-score
+                                                  current-score)
+                                     next-move (if next-score-better?
+                                                 next-possible-move
+                                                 (:best-move current-stuff))
+                                     next-beta (if (or (nil? current-beta)
+                                                       (< next-score current-beta))
+                                                 next-score
+                                                 current-beta)]
+                                 {:current-score next-score
+                                  :best-move next-move
+                                  :alpha current-alpha
+                                  :beta next-beta}))]
+              next-stuff))
+          {:current-score nil
+           :best-move nil
+           :alpha higher-alpha
+           :beta higher-beta}
+          (get-possible-moves board)))
 
 (defn maximise
-  [board marker depth maximiser higher-alpha higher-beta]
-  (if (terminal-state? board) 
-    {:current-score (score-terminal-board board 
-                                          depth 
-                                          maximiser)}
-    (reduce (fn [current-stuff next-possible-move]
-              (let [current-alpha (:alpha current-stuff)
-                    new-alpha (if (or (nil? current-alpha)
-                                      (> higher-alpha current-alpha))
-                                higher-alpha
-                                current-alpha)]
-                (if (and (some? new-alpha)
-                         (some? new-beta)
-                         (> new-alpha new-beta))
-                  current-stuff
-                  (let [current-score (:current-score current-stuff)
-                        next-marker (get-opp-marker marker)
-                        next-score (:current-score (minimise (place-mark board next-possible-move next-marker)
-                                                             next-marker
-                                                             (inc depth)
-                                                             maximiser
-                                                             new-alpha
-                                                             new-beta))
-                        updated-score (if (or (nil? current-score) 
-                                              (> next-score current-score))
-                                        next-score
-                                        current-score)
-                        updated-alpha (if (> updated-score new-alpha)
-                                        updated-score
-                                        new-alpha)]
-                    {:current-score updated-score
-                     :alpha updated-alpha
-                     :beta new-beta}))))
-            {:current-score nil}
-            (get-possible-moves board))))
+  [board marker depth higher-alpha higher-beta]
+  (reduce (fn [current-stuff next-possible-move]
+            (let [simulated-board (place-mark board next-possible-move marker)
+                  current-alpha (:alpha current-stuff)
+                  current-beta (:beta current-stuff)
+                  next-stuff (if (and (some? current-alpha)
+                                      (some? current-beta)
+                                      (> current-alpha current-beta))
+                               current-stuff
+                               (let [next-possible-score (if (terminal-state? simulated-board)
+                                                          (let [winner (winner? simulated-board)]
+                                                            (cond
+                                                            (nil? winner) tied-score
+                                                            (= marker winner) (- maximum-depth depth)
+                                                            :else (- depth maximum-depth)))
+                                                          (:current-score (minimise simulated-board 
+                                                                                    (get-opp-marker marker) 
+                                                                                    (inc depth) 
+                                                                                    current-alpha 
+                                                                                    current-beta)))
+                                     current-score (:current-score current-stuff)
+                                     next-score-better? (or (nil? current-score)
+                                                            (> next-possible-score current-score))
+                                     next-score (if next-score-better?
+                                                  next-possible-score
+                                                  current-score)
+                                     next-move (if next-score-better?
+                                                 next-possible-move
+                                                 (:best-move current-stuff))
+                                     next-alpha (if (or (nil? current-alpha)
+                                                       (> next-score current-alpha))
+                                                 next-score
+                                                 current-alpha)]
+                                 {:current-score next-score
+                                  :best-move next-move
+                                  :alpha next-alpha
+                                  :beta current-beta}))]
+              next-stuff))
+          {:current-score nil
+           :best-move nil
+           :alpha higher-alpha
+           :beta higher-beta}
+          (get-possible-moves board)))
 
 (defn get-tile-from-computer
   [board marker depth maximiser]
-  (let [optimum-move (maximise board
-                               marker
-                               depth
-                               maximiser)]
-    (:best-move optimum-move)))
+  (:best-move (maximise board
+                        marker
+                        depth
+                        -1000
+                        1000)))
