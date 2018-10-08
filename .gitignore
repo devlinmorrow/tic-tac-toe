@@ -25,6 +25,8 @@ pom.xml.asc
 [._]ss[a-gi-z]
 [._]sw[a-p]
 
+a.out
+
 # Session
 Session.vim
 
